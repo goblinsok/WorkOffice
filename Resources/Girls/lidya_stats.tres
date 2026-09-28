@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="GirlInfo" load_steps=2 format=3 uid="uid://dfnqs5nss5hqp"]
+
+[ext_resource type="Script" uid="uid://bcfu86pek5luo" path="res://Scripts/Girls/girl_info.gd" id="1_tp3td"]
+
+[resource]
+script = ExtResource("1_tp3td")
+energy = 100
+metadata/_custom_type_script = "uid://bcfu86pek5luo"

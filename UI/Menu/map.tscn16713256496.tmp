@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://41hk1nmd43em"]
+
+[ext_resource type="Script" uid="uid://jfdga0qysafo" path="res://UI/Menu/map.gd" id="1_o53n0"]
+[ext_resource type="Theme" uid="uid://bf2tteqrs86qe" path="res://UI/Themes/map.tres" id="2_2p203"]
+
+[node name="Map" type="CanvasLayer"]
+script = ExtResource("1_o53n0")
+
+[node name="Panel" type="Panel" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 400)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_2p203")
+
+[node name="WorkingArea" type="Button" parent="Panel"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 0
+offset_left = 57.0
+offset_top = 56.0
+offset_right = 157.0
+offset_bottom = 106.0
+theme = ExtResource("2_2p203")
+text = "Working Area
+"
+autowrap_mode = 2
+clip_text = true
+
+[node name="Kitchen" type="Button" parent="Panel"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 0
+offset_left = 231.0
+offset_top = 145.0
+offset_right = 331.0
+offset_bottom = 195.0
+theme = ExtResource("2_2p203")
+text = "Kitchen
+"
+autowrap_mode = 2
+clip_text = true
+
+[node name="Gym" type="Button" parent="Panel"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 0
+offset_left = 102.0
+offset_top = 234.0
+offset_right = 202.0
+offset_bottom = 284.0
+theme = ExtResource("2_2p203")
+text = "Gym
+"
+autowrap_mode = 2
+clip_text = true

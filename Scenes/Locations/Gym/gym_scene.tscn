@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgvnn500pe0pw"]
+
+[ext_resource type="PackedScene" uid="uid://b5umfel6gq3kw" path="res://Scenes/Locations/base_location.tscn" id="1_0nbxm"]
+[ext_resource type="Script" uid="uid://bo0qliry84aem" path="res://Scenes/Locations/Gym/gym_scene.gd" id="2_rnvyt"]
+[ext_resource type="Texture2D" uid="uid://bjfptvissjg8d" path="res://Assets/Locations/Gym/BG.jpg" id="3_uynp4"]
+
+[node name="Gym" instance=ExtResource("1_0nbxm")]
+script = ExtResource("2_rnvyt")
+
+[node name="BG" parent="." index="0"]
+scale = Vector2(0.1039959, 0.103995904)
+texture = ExtResource("3_uynp4")

@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="New Game Project"
+run/main_scene="uid://65y7e84d5swh"
+config/features=PackedStringArray("4.5", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+GameState="*res://Scripts/Autoload/autoload.gd"
+GlobalSignals="*res://Scripts/Autoload/global_signals.gd"
+Enums="*res://Scripts/Autoload/enums.gd"
+
+[display]
+
+window/size/viewport_width=900
+window/size/viewport_height=700
+
+[file_customization]
+
+folder_colors={
+"res://Assets/": "red",
+"res://Resources/": "green",
+"res://Scenes/": "yellow",
+"res://Scripts/": "blue",
+"res://UI/": "pink"
+}
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

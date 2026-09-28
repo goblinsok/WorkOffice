@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://gv44ik0vj3db"]
+
+[ext_resource type="PackedScene" uid="uid://b5umfel6gq3kw" path="res://Scenes/Locations/base_location.tscn" id="1_2rnn6"]
+[ext_resource type="Script" uid="uid://cgnccppefo57h" path="res://Scenes/Locations/WorkingArea/working_area.gd" id="2_3kcc6"]
+
+[node name="WorkingArea" instance=ExtResource("1_2rnn6")]
+script = ExtResource("2_3kcc6")

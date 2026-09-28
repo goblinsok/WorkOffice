@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://djiqxak0qvbw7"]
+
+[ext_resource type="Script" uid="uid://d2u70ojr6bm5m" path="res://Scenes/Girls/Location/base_girl_location_scene.gd" id="1_apgov"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_apgov"]
+size = Vector2(159, 543)
+
+[node name="BaseGirlLocationScene" type="Node2D"]
+script = ExtResource("1_apgov")
+
+[node name="Selector_Test" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(150.99998, 176)
+scale = Vector2(0.5977012, 2.0220587)
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(-108, -222, -119, 50, 142, 38, 128, -212)
+
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+
+[node name="Select" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Select"]
+shape = SubResource("RectangleShape2D_apgov")

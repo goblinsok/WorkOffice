@@ -1,0 +1,105 @@
+[gd_scene load_steps=4 format=3 uid="uid://ck80v31pq671x"]
+
+[ext_resource type="Script" uid="uid://b8rjxhfrmfkcu" path="res://UI/Game/game_ui.gd" id="1_3fiko"]
+[ext_resource type="Theme" uid="uid://bkyg86b6c0hib" path="res://UI/Themes/game_ui.tres" id="2_a3bln"]
+[ext_resource type="PackedScene" uid="uid://41hk1nmd43em" path="res://UI/Menu/map.tscn" id="3_vhnjf"]
+
+[node name="GameUi" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_3fiko")
+
+[node name="Map" parent="." instance=ExtResource("3_vhnjf")]
+unique_name_in_owner = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/separation = 1
+
+[node name="TopInfo" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TopInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Money" type="MarginContainer" parent="VBoxContainer/TopInfo/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TopInfo/HBoxContainer/Money"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="MoneyIcon" type="Label" parent="VBoxContainer/TopInfo/HBoxContainer/Money/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_a3bln")
+text = "$:"
+
+[node name="MoneyLabel" type="Label" parent="VBoxContainer/TopInfo/HBoxContainer/Money/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme = ExtResource("2_a3bln")
+text = "000"
+
+[node name="Date" type="MarginContainer" parent="VBoxContainer/TopInfo/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="DateLabel" type="Label" parent="VBoxContainer/TopInfo/HBoxContainer/Date"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_a3bln")
+text = "Date"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/TopInfo/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="TopMenu" type="Panel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TopMenu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TopMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="MapButton" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_a3bln")
+text = "Map"
+
+[node name="Button" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_a3bln")
+text = "rweqr"

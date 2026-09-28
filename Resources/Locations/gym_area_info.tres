@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LocationInfo" load_steps=3 format=3 uid="uid://crduu3gbrmk27"]
+
+[ext_resource type="PackedScene" uid="uid://bgvnn500pe0pw" path="res://Scenes/Locations/Gym/gym_scene.tscn" id="1_ef46b"]
+[ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="2_jm3sd"]
+
+[resource]
+script = ExtResource("2_jm3sd")
+scene = ExtResource("1_ef46b")
+identifier = 1
+metadata/_custom_type_script = "uid://im47ahwqfmn4"

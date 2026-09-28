@@ -1,0 +1,82 @@
+[gd_scene load_steps=9 format=3 uid="uid://dilancoh1gnht"]
+
+[ext_resource type="PackedScene" uid="uid://djiqxak0qvbw7" path="res://Scenes/Girls/Location/base_girl_location_scene.tscn" id="1_guit4"]
+[ext_resource type="Script" uid="uid://bir88hqxevlcd" path="res://Scenes/Girls/Location/WorkingArea/Lidya/lidya_WA_standing.gd" id="2_6nhac"]
+[ext_resource type="Texture2D" uid="uid://cedigx53fp3fo" path="res://Assets/Characters/Girls/Lidya/Sheet.png" id="3_0xmxf"]
+
+[sub_resource type="Animation" id="Animation_n4r8a"]
+resource_name = "Jumping"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_2idp1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2xoyw"]
+resource_name = "Standing"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i1sfh"]
+_data = {
+&"Jumping": SubResource("Animation_n4r8a"),
+&"RESET": SubResource("Animation_2idp1"),
+&"Standing": SubResource("Animation_2xoyw")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_guit4"]
+size = Vector2(159, 532)
+
+[node name="LidyaLocation" instance=ExtResource("1_guit4")]
+script = ExtResource("2_6nhac")
+
+[node name="AnimationPlayer" parent="." index="0"]
+libraries = {
+&"": SubResource("AnimationLibrary_i1sfh")
+}
+
+[node name="Sprite" parent="." index="1"]
+position = Vector2(-18, -54)
+texture = ExtResource("3_0xmxf")
+hframes = 3
+vframes = 2
+
+[node name="CollisionShape2D" parent="Select" index="0"]
+position = Vector2(-7, -21)
+shape = SubResource("RectangleShape2D_guit4")

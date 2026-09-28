@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b5umfel6gq3kw"]
+
+[ext_resource type="Script" uid="uid://je711gk7ulox" path="res://Scenes/Locations/base_location.gd" id="1_n30cx"]
+[ext_resource type="Texture2D" uid="uid://ctbval4jngy06" path="res://Assets/Locations/WorkingArea/BG.jpg" id="2_y8hwx"]
+
+[node name="BaseLocation" type="Node2D"]
+script = ExtResource("1_n30cx")
+
+[node name="BG" type="Sprite2D" parent="."]
+scale = Vector2(0.215, 0.215)
+texture = ExtResource("2_y8hwx")
