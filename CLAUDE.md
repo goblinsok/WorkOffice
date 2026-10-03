@@ -1,76 +1,61 @@
 # CLAUDE.md
 
-Guidance for working in this Godot project.
+Office-management game: the player manages 3+ girls, interacts with them, raises their stats, and assigns them to jobs (boss battles). Scope is loosely defined, so don't build ahead of the current task without an explicit request.
 
-## Project
+Godot 4.5, GDScript only, 900x700 viewport. Main scene: `Scenes/base.tscn`. Not a git repo.
 
-Office-management game. The player manages 3+ girls: interacts with them, raises their stats, and assigns them to work. Scope is still loosely defined, so don't build ahead of the current task without an explicit request.
-
-- **Engine:** Godot 4.5, Forward+ renderer, GDScript only
-- **Viewport:** 900x700, nearest-neighbor texture filtering
-- **Main scene:** `res://Scenes/base.tscn`
-- **Not a git repo** (there is no version control yet)
-
-## Folder layout
-
-| Folder | Contents |
-|---|---|
-| `Assets/` | Raw art: character sprite sheets (`Characters/Girls/<Name>/Sheet.png`), location backgrounds (`Locations/<Loc>/BG.jpg`) |
-| `Resources/` | `.tres` data instances: girl stats, player info, location info |
-| `Scenes/` | Gameplay scenes and their attached scripts: the root `base`, locations, girl-in-location scenes |
-| `Scripts/` | Scripts that aren't tied to a scene: autoloads and data classes (`Resource` subclasses) |
-| `UI/` | HUD (`Game/`), menus (`Menu/`), themes (`Themes/`) |
-
-## Architecture
-
-### Autoloads (`Scripts/Autoload/`)
-- `GameState` (`autoload.gd`): global state. Holds the girl resources (`lidya`, `nelle`), `player_stats: PlayerInfo`, and `world_info: WorldInfo`.
-- `GlobalSignals` (`global_signals.gd`): event bus. Currently only `switch_location(new_location: LocationInfo)`.
-- `Enums` (`enums.gd`): `TIME_STATE`, `WEEK_STATE`, `LOCATIONS`.
-
-### Data model (Resources)
-- `GirlInfo` (`Scripts/Girls/girl_info.gd`): exported stats `energy`/`max_energy`, `arousal`, `affection`/`max_affection`. One `.tres` per girl in `Resources/Girls/`.
-- `PlayerInfo`: `money` (its setter emits `money_update`) and `fame`.
-- `WorldInfo`: current time, day, and location. Owns the singleton `LocationInfo` instances (`gym_location`, `working_area_location`) plus `advance_time()`/`advance_day()`.
-- `LocationInfo` → `GymInfo`, `WorkingAreaInfo`, `KitchenInfo` (`Scripts/Locations/Available/`). Each subclass preloads its scene by UID in `_init()`.
-- `GirlsRepo`: empty placeholder.
-
-### Scene tree and flow
+## Verify every change
 ```
-Base (Control, base.gd)
-├─ GameUi (CanvasLayer, layer 10): top bar with money and date, Map button
-│   └─ Map (CanvasLayer, layer 20): slide-in panel with location buttons
-└─ LocationControl
-    ├─ LocationBlackFade: fade overlay used during transitions
-    └─ LocationCenter: holds the current BaseLocation instance
+G="D:/MyGame/Godot_v4.5.1/Godot_v4.5.1-stable_win64_console.exe"
+"$G" --headless --path . --import                     # script/resource errors
+"$G" --headless --path . res://Tests/smoke_test.tscn  # end-to-end, prints PASS / N FAILURES
 ```
-- **Location switching:** a map button emits `GlobalSignals.switch_location(LocationInfo)`. `base.gd` fades to black, instantiates `LocationInfo.scene`, frees the old location, and fades back in. `map.gd` closes itself and disables the button for the current location.
-- **Locations:** `BaseLocation` (`Scenes/Locations/base_location.tscn`) is a `Node2D` with a `BG` sprite. Concrete locations inherit it (`working_area.tscn`, `gym_scene.tscn`).
-- **Girls in locations:** `BaseGirlLocation` (`Scenes/Girls/Location/base_girl_location_scene.tscn`) has a Sprite, an AnimationPlayer, a `Select` Area2D that handles hover, and a `Selector_Test` highlight polygon. Per-girl, per-location variants inherit it, for example `WorkingArea/Lidya/lidya_WA_standing.tscn` (animations `Standing` and `Jumping`).
+Keep `Tests/smoke_test.gd` in sync with core flows. For visual checks, run a temporary scene that saves `get_viewport().get_texture().get_image()`, then delete it. **Only ever stop the Godot process you started (by PID). The user's editor may be open.**
+
+## Subsystem docs: read the one for the area you touch
+| Area | Doc | Code |
+|---|---|---|
+| Interactions, conditions/effects, expressions | `Scripts/Interactions/CLAUDE.md` | `Scripts/Interactions`, `Scripts/Core`, `UI/Interaction` |
+| Dialog scripts (`.dlg`) and the dialog runtime | `Dialogs/README.md`, `Scripts/Dialog/CLAUDE.md` | `Scripts/Dialog`, `UI/Dialog` |
+| Locations, POIs, girl views, placement | `Scenes/Locations/CLAUDE.md` | `Scenes/`, `Scripts/Locations` |
+| Items and inventory | `Scripts/Items/CLAUDE.md` | `Scripts/Items`, `UI/Menus/Inventory` |
+| Jobs, boss battle, day end | `Scripts/Jobs/CLAUDE.md` | `Scripts/Jobs`, `Scripts/Battle`, `UI/Battle`, `UI/Menus/Job` |
+| All UI: layers, menus, input blocking, drag & drop | `UI/CLAUDE.md` | `UI/` |
+
+Data (`.tres`) lives in `Resources/<Area>/`, and each area has a `*_repo.tres` registry. Class APIs are documented in `##` comments at the top of each script. Read those instead of expecting field lists here.
+
+## Core architecture
+Data-driven: content lives in Resources and `.dlg` files, logic in small systems, and scenes are views.
+
+Autoloads, in load order:
+- `GameState`: data only (`girls`, `locations`, `jobs`, `player_stats` + inventory, `world_info`)
+- `GlobalSignals`: event bus
+- `Enums`
+- `ScreenFader`: `await fade_out()` / `fade_in()`
+- `DialogManager`
+- `InteractionManager`
+- `TimeManager`: actions, phases, and `register_day_end_step()`
+- `JobManager`
+
+**Time loop:** every interaction spends actions (3 per phase). At 0, `TimeManager.advance_phase()` runs. At the end of Evening it first awaits the day-end steps (the job battle). Then it fades, advances the phase (and the day, restoring girls' energy), refills actions, re-places the girls, and fades back in.
 
 ## Conventions
-- Static typing: `var x: Type`, and `-> void` return types on functions.
-- `class_name X extends Y` on one line for reusable classes.
-- Node references use unique names: `@onready var foo: Type = %Foo`.
-- Scenes and resources are often referenced by UID (`preload("uid://...")`). Prefer UIDs over paths so references survive file moves.
-- Tweens: `get_tree().create_tween()`, then `await tween.finished`, then `kill()`.
-- Cross-system communication goes through `GlobalSignals`. UI reads state from `GameState`.
-- Base scenes and scripts are named `base_*`, and concrete variants inherit them (both the scene and the script).
-- Tabs for indentation (see `.editorconfig`).
+- Static typing everywhere. `class_name X extends Y` on one line. Use `@abstract` for bases that must be subclassed.
+- Node references use `@onready var x: T = %UniqueName`. Base scenes are named `base_*`, and variants inherit both the scene and the script.
+- Ids are lowercase `StringName`s (`&"working_area"`). Indent with tabs.
+- Cross-system events go through `GlobalSignals`. Direct calls into manager autoloads are fine for commands.
+- Runtime state lives on the loaded `.tres` instances (not duplicated). That's fine at runtime, but a save system must serialize it.
 
-## Known issues / tech debt (as of initial analysis)
-- `Enums.TIME_STATE` sets every value to `1`, so `MORNING == AFTERNOON == EVENING`.
-- `WorldInfo.advance_time()`/`advance_day()` assign `find_key()` (a String) to an enum-typed variable. They should assign the int value.
-- `LidyaLocation` is instanced directly under `Base/LocationCenter` instead of inside the working-area scene, so she stays visible on every location.
-- `Resources/Locations/*.tres` are unused. They also set an `identifier` property that `LocationInfo` doesn't define, and `scene` isn't `@export`ed.
-- The Kitchen map button isn't wired up, and `KitchenInfo` has no scene.
-- The map doesn't disable the Working Area button at startup, and the `Close` button is unconnected.
-- `base.gd` hardcodes the initial scene instead of using `GameState.world_info.current_location`.
-- `update_date()` is only called in `_ready`, and nothing triggers a time advance yet.
-- There are debug `print`s in `base_girl_location_scene.gd`, stray `map.tscn*.tmp` files, and a placeholder "rweqr" button in `game_ui.tscn`.
-- `GirlsRepo` is empty, and the girl `.tres` files are loaded ad hoc in `GameState`.
+## Traps (these have bitten before)
+- **Never `preload()` `Resources/**/*.tres` in autoloads or in scripts those resources depend on.** Use `load()`. It creates a compile-time cycle: the editor shows "Could not parse global class" and then re-saves `.tres` files with sub-resources dropped.
+- Never invent UIDs. Reference new files by `res://` path; Godot adds UIDs on save.
+- Don't name methods or variables after GDScript builtins (`get_stack`, `round`, `match`, `size`).
+- A function containing `await` is a coroutine. Call it bare or with `await`, never assign its result without awaiting.
+- `.tscn`/`.tres` are safe to hand-write for plain properties. Generate complex ones with a script, and check them with the import command.
+- After outside edits, the user's editor needs Project → Reload Current Project before it saves anything.
 
-## Working notes
-- Don't hand-edit `.tscn`/`.tres` files unless the change is simple and safe (property values, adding nodes). Prefer describing editor steps for anything complex, such as animations or new UIDs.
-- New `.gd` files get a `.gd.uid` sidecar from the editor. Don't invent UIDs.
-- Keep changes scoped to the current task. Log newly found issues in the section above instead of fixing them unasked.
+## Known issues / tech debt
+- `*.dlg` must be added to the export preset's non-resource filter.
+- There's no save/load, no "new game" reset, and no id registry for items or jobs.
+- The Kitchen has no scene. Nelle's sprite sheet has a baked checkerboard (no alpha). Girl scene paths say `WorkingArea/` but are used everywhere.
+- Location travel and item use cost no actions (intentional for now).

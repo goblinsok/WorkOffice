@@ -97,3 +97,5 @@ theme_override_constants/margin_bottom = 4
 [node name="Close" type="Button" parent="Control/CenterContainer/Panel/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+text = "X"

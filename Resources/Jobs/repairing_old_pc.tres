@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="JobData" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Jobs/job_data.gd" id="1_job_data"]
+[ext_resource type="Script" path="res://Scripts/Jobs/boss_ability.gd" id="2_boss_abili"]
+[ext_resource type="Script" path="res://Scripts/Jobs/status_effect_data.gd" id="3_status_eff"]
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("2_boss_abili")
+display_name = "Whirring Fans"
+description = "The fans spin up to jet-engine volume. Hard to concentrate. (Placeholder: no effect yet)"
+trigger = 0
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("2_boss_abili")
+display_name = "Blue Screen of Death"
+description = "Panics when nearly fixed. (Placeholder: no effect yet)"
+trigger = 2
+hp_threshold_percent = 30
+
+[sub_resource type="Resource" id="Resource_3"]
+script = ExtResource("3_status_eff")
+display_name = "Overheating"
+description = "The CPU runs hot. +5 Attack."
+modifiers = Dictionary[StringName, int]({&"attack": 5})
+
+[sub_resource type="Resource" id="Resource_4"]
+script = ExtResource("3_status_eff")
+display_name = "Loose Screws"
+description = "The case barely holds together. Takes +2 damage from every hit."
+is_debuff = true
+modifiers = Dictionary[StringName, int]({&"damage_taken": 2})
+
+[resource]
+script = ExtResource("1_job_data")
+id = &"repairing_old_pc"
+display_name = "Repairing Old PC"
+short_name = "PC"
+flavor_text = "A beige tower from another era. It takes ten minutes to boot, hums like a jet engine, and management insists it can be saved."
+max_hp = 150
+hp = 150
+attack = 20
+attack_name = "Dust Cloud"
+attack_description = "Blows years of dust at everyone once work starts. Drains Energy from every assigned girl."
+abilities = Array[ExtResource("2_boss_abili")]([SubResource("Resource_1"), SubResource("Resource_2")])
+status_effects = Array[ExtResource("3_status_eff")]([SubResource("Resource_3"), SubResource("Resource_4")])
+max_assigned = 3
+reward_money = 100
+reward_fame = 5

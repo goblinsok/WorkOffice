@@ -1,52 +1,66 @@
 extends CanvasLayer
+## HUD: top bar (money, date, actions) and the toolbar. menu_buttons maps each
+## toolbar button to a BaseMenu, and only one menu is open at a time.
 
 @onready var money_label: Label = %MoneyLabel
 @onready var date_label: Label = %DateLabel
+@onready var actions_label: Label = %ActionsLabel
 
 @onready var map_button: Button = %MapButton
 @onready var map: CanvasLayer = %Map
 
-# Called when the node enters the scene tree for the first time.
+## Toolbar button -> menu it toggles. Only one menu is open at a time.
+@onready var menu_buttons: Dictionary[Button, BaseMenu] = {
+	%GirlsButton: %GirlsMenu,
+	%ItemsButton: %InventoryMenu,
+	%CardButton: %EmployeeCard,
+	%JobButton: %JobMenu,
+}
+
+
 func _ready() -> void:
-	GameState.player_stats.money_update.connect(update_money)
-	money_label.text = str(GameState.player_stats.money)
+	var player := GameState.player_stats
+	player.money_update.connect(update_money)
+	player.actions_changed.connect(update_actions)
+	GlobalSignals.time_changed.connect(func(_day, _time): update_date())
+
+	update_money()
+	update_actions(player.actions, player.max_actions)
 	update_date()
-	
+
 	map_button.pressed.connect(open_map)
-	map.closed.connect(func (): map_button.disabled = false)
-	
-func update_ui() -> void:
-	pass
-	
+	map.closed.connect(func(): map_button.disabled = false)
+
+	for button in menu_buttons:
+		button.pressed.connect(toggle_menu.bind(menu_buttons[button]))
+
+
+func toggle_menu(menu: BaseMenu) -> void:
+	var was_open := menu.is_open()
+	close_menus()
+	if not was_open:
+		menu.open()
+
+
+func close_menus() -> void:
+	for menu: BaseMenu in menu_buttons.values():
+		menu.close()
+
+
 func open_map() -> void:
+	close_menus()
 	map.show_map()
 	map_button.disabled = true
-	
+
+
 func update_money() -> void:
-	var diff = GameState.player_stats.money - int(money_label.text)
-	
-	print("Difference in money - %s" % diff)
-	
 	money_label.text = str(GameState.player_stats.money)
 
+
+func update_actions(actions: int, max_actions: int) -> void:
+	actions_label.text = "Actions: %s" % ("●".repeat(actions) + "○".repeat(max_actions - actions))
+
+
 func update_date() -> void:
-	var day_format : String
-	var time_format : String
-	
-	match GameState.world_info.current_time:
-		Enums.TIME_STATE.MORNING:
-			time_format = 'Morning'
-		Enums.TIME_STATE.AFTERNOON:
-			time_format = 'Afternoon'
-		Enums.TIME_STATE.EVENING:
-			time_format = 'Evening'
-			
-	match GameState.world_info.current_day:
-		Enums.WEEK_STATE.MONDAY:
-			day_format = 'MON'
-		Enums.WEEK_STATE.TUESDAY:
-			day_format = 'TUE'
-		Enums.WEEK_STATE.WEDNESDAY:
-			day_format = 'WED'
-			
-	date_label.text = '%s, %s' % [day_format, time_format]
+	var world := GameState.world_info
+	date_label.text = "%s, %s" % [Enums.WEEK_STATE_NAMES[world.current_day], Enums.TIME_STATE_NAMES[world.current_time]]

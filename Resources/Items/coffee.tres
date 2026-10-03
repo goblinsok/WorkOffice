@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Items/item_data.gd" id="1_item_data"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/expression_condition.gd" id="2_expression"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/expression_effect.gd" id="3_expression"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="4_interactio"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="5_interactio"]
+[ext_resource type="Script" path="res://Scripts/Items/usable_component.gd" id="6_usable_com"]
+[ext_resource type="Script" path="res://Scripts/Items/item_component.gd" id="7_item_compo"]
+
+[sub_resource type="Gradient" id="Gradient_1"]
+colors = PackedColorArray(0.8, 0.6, 0.4, 1, 0.25, 0.13, 0.05, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2"]
+gradient = SubResource("Gradient_1")
+width = 48
+height = 48
+fill = 1
+fill_from = Vector2(0.5, 0.35)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Resource" id="Resource_3"]
+script = ExtResource("2_expression")
+expression = "player.actions < player.max_actions"
+
+[sub_resource type="Resource" id="Resource_4"]
+script = ExtResource("3_expression")
+expression = "add_actions(1)"
+description = "+1 Action"
+
+[sub_resource type="Resource" id="Resource_5"]
+script = ExtResource("6_usable_com")
+target = 0
+conditions = Array[ExtResource("4_interactio")]([SubResource("Resource_3")])
+effects = Array[ExtResource("5_interactio")]([SubResource("Resource_4")])
+
+[resource]
+script = ExtResource("1_item_data")
+id = &"coffee"
+display_name = "Double Espresso"
+icon = SubResource("GradientTexture2D_2")
+short_name = "CAFE"
+flavor_text = "Bitter, black and strong enough to reschedule your sleep."
+max_stack = 10
+components = Array[ExtResource("7_item_compo")]([SubResource("Resource_5")])

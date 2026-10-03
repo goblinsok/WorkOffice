@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 GameState="*res://Scripts/Autoload/autoload.gd"
 GlobalSignals="*res://Scripts/Autoload/global_signals.gd"
 Enums="*res://Scripts/Autoload/enums.gd"
+ScreenFader="*res://UI/Fader/screen_fader.tscn"
+DialogManager="*res://Scripts/Autoload/dialog_manager.gd"
+InteractionManager="*res://Scripts/Autoload/interaction_manager.gd"
+TimeManager="*res://Scripts/Autoload/time_manager.gd"
+JobManager="*res://Scripts/Autoload/job_manager.gd"
 
 [display]
 
@@ -30,6 +35,7 @@ window/size/viewport_height=700
 
 folder_colors={
 "res://Assets/": "red",
+"res://Dialogs/": "orange",
 "res://Resources/": "green",
 "res://Scenes/": "yellow",
 "res://Scripts/": "blue",

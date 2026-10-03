@@ -1,9 +1,52 @@
-[gd_resource type="Resource" script_class="LocationInfo" load_steps=3 format=3 uid="uid://btlh5lgm2lwy6"]
+[gd_resource type="Resource" script_class="LocationInfo" load_steps=15 format=3 uid="uid://btlh5lgm2lwy6"]
 
-[ext_resource type="PackedScene" uid="uid://gv44ik0vj3db" path="res://Scenes/Locations/WorkingArea/working_area.tscn" id="1_lu7go"]
-[ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="2_rjnj6"]
+[ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="1_location_i"]
+[ext_resource type="PackedScene" uid="uid://gv44ik0vj3db" path="res://Scenes/Locations/WorkingArea/working_area.tscn" id="2_working_ar"]
+[ext_resource type="Resource" path="res://Resources/Interactions/talk.tres" id="3_talk"]
+[ext_resource type="Resource" path="res://Resources/Interactions/look.tres" id="4_look"]
+[ext_resource type="Resource" path="res://Resources/Interactions/reward.tres" id="5_reward"]
+[ext_resource type="Script" path="res://Scripts/Interactions/interaction_data.gd" id="6_interactio"]
+[ext_resource type="Script" path="res://Scripts/Locations/poi_girl_setup.gd" id="7_poi_girl_s"]
+[ext_resource type="Script" path="res://Scripts/Locations/poi_info.gd" id="8_poi_info"]
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("7_poi_girl_s")
+girl_id = &"lidya"
+animation = &"Standing"
+interactions = Array[ExtResource("6_interactio")]([ExtResource("3_talk"), ExtResource("4_look"), ExtResource("5_reward")])
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("7_poi_girl_s")
+girl_id = &"nelle"
+animation = &"Standing"
+interactions = Array[ExtResource("6_interactio")]([ExtResource("3_talk"), ExtResource("4_look"), ExtResource("5_reward")])
+
+[sub_resource type="Resource" id="Resource_3"]
+script = ExtResource("8_poi_info")
+id = &"desk_left"
+girl_setups = Array[ExtResource("7_poi_girl_s")]([SubResource("Resource_1"), SubResource("Resource_2")])
+
+[sub_resource type="Resource" id="Resource_4"]
+script = ExtResource("7_poi_girl_s")
+girl_id = &"lidya"
+animation = &"Standing"
+interactions = Array[ExtResource("6_interactio")]([ExtResource("3_talk"), ExtResource("4_look"), ExtResource("5_reward")])
+
+[sub_resource type="Resource" id="Resource_5"]
+script = ExtResource("7_poi_girl_s")
+girl_id = &"nelle"
+animation = &"Standing"
+interactions = Array[ExtResource("6_interactio")]([ExtResource("3_talk"), ExtResource("4_look"), ExtResource("5_reward")])
+
+[sub_resource type="Resource" id="Resource_6"]
+script = ExtResource("8_poi_info")
+id = &"desk_right"
+girl_setups = Array[ExtResource("7_poi_girl_s")]([SubResource("Resource_4"), SubResource("Resource_5")])
 
 [resource]
-script = ExtResource("2_rjnj6")
-scene = ExtResource("1_lu7go")
+script = ExtResource("1_location_i")
+id = &"working_area"
+display_name = "Working Area"
+scene = ExtResource("2_working_ar")
+points_of_interest = Array[ExtResource("8_poi_info")]([SubResource("Resource_3"), SubResource("Resource_6")])
 metadata/_custom_type_script = "uid://im47ahwqfmn4"

@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Items/item_data.gd" id="1_item_data"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/stat_effect.gd" id="2_stat_effec"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="3_interactio"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="4_interactio"]
+[ext_resource type="Script" path="res://Scripts/Items/usable_component.gd" id="5_usable_com"]
+[ext_resource type="Script" path="res://Scripts/Items/item_component.gd" id="6_item_compo"]
+
+[sub_resource type="Gradient" id="Gradient_1"]
+colors = PackedColorArray(0.95, 0.55, 0.65, 1, 0.45, 0.2, 0.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2"]
+gradient = SubResource("Gradient_1")
+width = 48
+height = 48
+fill = 1
+fill_from = Vector2(0.5, 0.35)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Resource" id="Resource_3"]
+script = ExtResource("2_stat_effec")
+stat = &"affection"
+amount = 1
+
+[sub_resource type="Resource" id="Resource_4"]
+script = ExtResource("5_usable_com")
+target = 1
+conditions = Array[ExtResource("3_interactio")]([])
+effects = Array[ExtResource("4_interactio")]([SubResource("Resource_3")])
+
+[resource]
+script = ExtResource("1_item_data")
+id = &"chocolate_box"
+display_name = "Box of Chocolates"
+icon = SubResource("GradientTexture2D_2")
+short_name = "CHOC"
+flavor_text = "A heart-shaped box. Nobody has to know it was on sale."
+max_stack = 5
+components = Array[ExtResource("6_item_compo")]([SubResource("Resource_4")])

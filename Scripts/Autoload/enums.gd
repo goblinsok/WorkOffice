@@ -1,24 +1,35 @@
 extends Node
 
+## Phases of a single day. Values are sequential indexes starting at 0.
 enum TIME_STATE {
-	MORNING = 1,
-	AFTERNOON = 1,
-	EVENING = 1
+	MORNING,
+	AFTERNOON,
+	EVENING
 }
 
+## Days of the week. Values are sequential indexes starting at 0.
 enum WEEK_STATE {
-	MONDAY = 1,
-	TUESDAY = 2,
-	WEDNESDAY = 3
+	MONDAY,
+	TUESDAY,
+	WEDNESDAY,
+	THURSDAY,
+	FRIDAY,
+	SATURDAY,
+	SUNDAY
 }
 
-enum LOCATIONS {
-	WORKING_AREA,
-	GYM,
-	KITCHEN
+const TIME_STATE_NAMES: Dictionary = {
+	TIME_STATE.MORNING: "Morning",
+	TIME_STATE.AFTERNOON: "Afternoon",
+	TIME_STATE.EVENING: "Evening",
 }
 
-#enum GirlNames {
-	#LIDYA,
-	#NELLE
-#}
+const WEEK_STATE_NAMES: Dictionary = {
+	WEEK_STATE.MONDAY: "MON",
+	WEEK_STATE.TUESDAY: "TUE",
+	WEEK_STATE.WEDNESDAY: "WED",
+	WEEK_STATE.THURSDAY: "THU",
+	WEEK_STATE.FRIDAY: "FRI",
+	WEEK_STATE.SATURDAY: "SAT",
+	WEEK_STATE.SUNDAY: "SUN",
+}

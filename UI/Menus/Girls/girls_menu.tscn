@@ -1,0 +1,258 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="PackedScene" path="res://UI/Menus/base_menu.tscn" id="1_base"]
+[ext_resource type="Script" path="res://UI/Menus/Girls/girls_menu.gd" id="2_script"]
+[ext_resource type="PackedScene" path="res://UI/Components/stat_bar.tscn" id="3_bar"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_folder"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.82, 0.68, 0.43, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.52, 0.39, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 14
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper"]
+content_margin_left = 22.0
+content_margin_top = 18.0
+content_margin_right = 22.0
+content_margin_bottom = 18.0
+bg_color = Color(0.97, 0.95, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.62, 0.5, 1)
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 3
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab"]
+content_margin_left = 14.0
+content_margin_top = 4.0
+content_margin_right = 14.0
+content_margin_bottom = 4.0
+bg_color = Color(0.72, 0.58, 0.35, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0.52, 0.39, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_hover"]
+content_margin_left = 14.0
+content_margin_top = 4.0
+content_margin_right = 14.0
+content_margin_bottom = 4.0
+bg_color = Color(0.86, 0.76, 0.56, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0.52, 0.39, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_selected"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 4.0
+bg_color = Color(0.97, 0.95, 0.88, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0.52, 0.39, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_photo"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.6, 0.6, 1)
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 3
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamp"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.75, 0.15, 0.15, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="GirlsMenu" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+title = "PERSONNEL FILES"
+
+[node name="Window" parent="Center" index="0"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_folder")
+
+[node name="Pages" type="VBoxContainer" parent="Center/Window/Layout/Content" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Tabs" type="HBoxContainer" parent="Center/Window/Layout/Content/Pages"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TabTemplate" type="Button" parent="Center/Window/Layout/Content/Pages/Tabs"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_tab")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tab_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tab_selected")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_tab_selected")
+toggle_mode = true
+text = "Name"
+
+[node name="Page" type="PanelContainer" parent="Center/Window/Layout/Content/Pages"]
+custom_minimum_size = Vector2(660, 420)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_paper")
+
+[node name="Columns" type="HBoxContainer" parent="Center/Window/Layout/Content/Pages/Page"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Left" type="VBoxContainer" parent="Center/Window/Layout/Content/Pages/Page/Columns"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PhotoFrame" type="PanelContainer" parent="Center/Window/Layout/Content/Pages/Page/Columns/Left"]
+custom_minimum_size = Vector2(190, 240)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_photo")
+
+[node name="Photo" type="TextureRect" parent="Center/Window/Layout/Content/Pages/Page/Columns/Left/PhotoFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PhotoPlaceholder" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Left/PhotoFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "NO PHOTO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Stamp" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Left"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.75, 0.15, 0.15, 0.85)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_stamp")
+text = "CONFIDENTIAL"
+
+[node name="Right" type="VBoxContainer" parent="Center/Window/Layout/Content/Pages/Page/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="NameLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "NAME"
+
+[node name="RoleLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Position: -"
+
+[node name="LocationLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Last seen: -"
+
+[node name="JobLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Assigned job: -"
+
+[node name="Sep1" type="HSeparator" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+layout_mode = 2
+
+[node name="StatusHeader" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "STATUS"
+
+[node name="EnergyBar" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right" instance=ExtResource("3_bar")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Energy"
+fill_color = Color(0.95, 0.75, 0.2, 1)
+
+[node name="AffectionBar" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right" instance=ExtResource("3_bar")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Affection"
+fill_color = Color(0.9, 0.4, 0.55, 1)
+
+[node name="ArousalBar" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right" instance=ExtResource("3_bar")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Arousal"
+fill_color = Color(0.7, 0.35, 0.85, 1)
+
+[node name="WorkHeader" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "WORK PERFORMANCE"
+
+[node name="WorkRow" type="HBoxContainer" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="AttackLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right/WorkRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Attack: 0"
+
+[node name="AttackCostLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right/WorkRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Energy per attack: 0"
+
+[node name="Sep2" type="HSeparator" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+layout_mode = 2
+
+[node name="BioLabel" type="Label" parent="Center/Window/Layout/Content/Pages/Page/Columns/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.27, 0.22, 1)
+theme_override_font_sizes/font_size = 14
+text = "Bio"
+autowrap_mode = 3

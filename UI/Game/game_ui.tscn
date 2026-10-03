@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://ck80v31pq671x"]
+[gd_scene load_steps=8 format=3 uid="uid://ck80v31pq671x"]
 
 [ext_resource type="Script" uid="uid://b8rjxhfrmfkcu" path="res://UI/Game/game_ui.gd" id="1_3fiko"]
 [ext_resource type="Theme" uid="uid://bkyg86b6c0hib" path="res://UI/Themes/game_ui.tres" id="2_a3bln"]
 [ext_resource type="PackedScene" uid="uid://41hk1nmd43em" path="res://UI/Menu/map.tscn" id="3_vhnjf"]
+[ext_resource type="PackedScene" path="res://UI/Menus/Girls/girls_menu.tscn" id="4_girls"]
+[ext_resource type="PackedScene" path="res://UI/Menus/Inventory/inventory_menu.tscn" id="5_items"]
+[ext_resource type="PackedScene" path="res://UI/Menus/Player/employee_card.tscn" id="6_card"]
+[ext_resource type="PackedScene" path="res://UI/Menus/Job/job_menu.tscn" id="7_job"]
 
 [node name="GameUi" type="CanvasLayer"]
 layer = 10
@@ -73,6 +77,17 @@ text = "Date"
 [node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/TopInfo/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ActionsLabel" type="Label" parent="VBoxContainer/TopInfo/HBoxContainer/MarginContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_a3bln")
+text = "Actions: ●●●"
+horizontal_alignment = 2
 
 [node name="TopMenu" type="Panel" parent="VBoxContainer"]
 layout_mode = 2
@@ -98,8 +113,59 @@ focus_mode = 0
 theme = ExtResource("2_a3bln")
 text = "Map"
 
-[node name="Button" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+[node name="GirlsButton" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("2_a3bln")
-text = "rweqr"
+text = "Girls"
+
+[node name="ItemsButton" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_a3bln")
+text = "Items"
+
+[node name="CardButton" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_a3bln")
+text = "Card"
+
+[node name="JobButton" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("2_a3bln")
+text = "Job"
+
+[node name="Menus" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GirlsMenu" parent="Menus" instance=ExtResource("4_girls")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="InventoryMenu" parent="Menus" instance=ExtResource("5_items")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="EmployeeCard" parent="Menus" instance=ExtResource("6_card")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="JobMenu" parent="Menus" instance=ExtResource("7_job")]
+unique_name_in_owner = true
+layout_mode = 1

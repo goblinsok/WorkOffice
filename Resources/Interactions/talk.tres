@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="InteractionData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Interactions/interaction_data.gd" id="1_interactio"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/dialog_effect.gd" id="2_dialog_eff"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="3_interactio"]
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("2_dialog_eff")
+dialog_path = "res://Dialogs/{girl}/talk.dlg"
+
+[resource]
+script = ExtResource("1_interactio")
+id = &"talk"
+label = "Talk"
+effects = Array[ExtResource("3_interactio")]([SubResource("Resource_1")])

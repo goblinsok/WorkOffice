@@ -1,10 +1,11 @@
 [gd_resource type="Resource" script_class="LocationInfo" load_steps=3 format=3 uid="uid://covke1fg6kh7j"]
 
-[ext_resource type="PackedScene" uid="uid://bgvnn500pe0pw" path="res://Scenes/Locations/Gym/gym_scene.tscn" id="1_13rc0"]
-[ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="2_hl2j2"]
+[ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="1_location_i"]
+[ext_resource type="Script" path="res://Scripts/Locations/poi_info.gd" id="2_poi_info"]
 
 [resource]
-script = ExtResource("2_hl2j2")
-scene = ExtResource("1_13rc0")
-identifier = 2
+script = ExtResource("1_location_i")
+id = &"kitchen"
+display_name = "Kitchen"
+points_of_interest = Array[ExtResource("2_poi_info")]([])
 metadata/_custom_type_script = "uid://im47ahwqfmn4"

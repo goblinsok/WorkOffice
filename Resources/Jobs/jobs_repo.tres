@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="JobsRepo" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Jobs/jobs_repo.gd" id="1_jobs_repo"]
+[ext_resource type="Resource" path="res://Resources/Jobs/repairing_old_pc.tres" id="2_repairing_"]
+[ext_resource type="Script" path="res://Scripts/Jobs/job_data.gd" id="3_job_data"]
+
+[resource]
+script = ExtResource("1_jobs_repo")
+jobs = Array[ExtResource("3_job_data")]([ExtResource("2_repairing_")])

@@ -1,0 +1,17 @@
+# Nelle - "Talk" interaction.
+
+if not flag("met_nelle")
+	do set_flag("met_nelle")
+	Nelle: Hi! I'm Nelle. Nice to finally meet you.
+	=> END
+
+Nelle: Oh, hi {player.display_name}!
+- Want to grab lunch later?
+	if girl.affection >= 3
+		Nelle: I'd love to!
+		do add_stat("affection", 1)
+	else
+		Nelle: Maybe some other time...
+- Keep up the good work.
+	Nelle: Thanks, I'm trying my best.
+Nelle: Talk to you later!

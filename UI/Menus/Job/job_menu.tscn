@@ -1,0 +1,196 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://UI/Menus/base_menu.tscn" id="1_base"]
+[ext_resource type="Script" path="res://UI/Menus/Job/job_menu.gd" id="2_script"]
+[ext_resource type="PackedScene" path="res://UI/Components/stat_bar.tscn" id="3_bar"]
+[ext_resource type="PackedScene" path="res://UI/Menus/Job/girl_drop_zone.tscn" id="4_zone"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.18, 0.2, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.65, 0.18, 0.15, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tag"]
+content_margin_left = 6.0
+content_margin_top = 1.0
+content_margin_right = 6.0
+content_margin_bottom = 1.0
+bg_color = Color(0.65, 0.18, 0.15, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_section"]
+font_size = 13
+font_color = Color(0.45, 0.38, 0.3, 1)
+
+[node name="JobMenu" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+title = "JOB BOARD"
+
+[node name="Root" type="VBoxContainer" parent="Center/Window/Layout/Content" index="0"]
+layout_mode = 2
+
+[node name="NoJobLabel" type="Label" parent="Center/Window/Layout/Content/Root"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 2
+text = "No active job. Enjoy the quiet while it lasts."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="JobBody" type="VBoxContainer" parent="Center/Window/Layout/Content/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Top" type="HBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Left" type="VBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BossFrame" type="PanelContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top/Left"]
+custom_minimum_size = Vector2(180, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_boss")
+
+[node name="BossIcon" type="TextureRect" parent="Center/Window/Layout/Content/Root/JobBody/Top/Left/BossFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BossShortLabel" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/Left/BossFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 48
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HpBar" parent="Center/Window/Layout/Content/Root/JobBody/Top/Left" instance=ExtResource("3_bar")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Boss HP"
+fill_color = Color(0.8, 0.22, 0.2, 1)
+
+[node name="RewardLabel" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/Left"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Reward"
+
+[node name="RightScroll" type="ScrollContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top"]
+custom_minimum_size = Vector2(440, 250)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="Right" type="VBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="NameRow" type="HBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+layout_mode = 2
+
+[node name="JobNameLabel" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right/NameRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Job"
+
+[node name="BossTag" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right/NameRow"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_tag")
+text = "BOSS"
+
+[node name="FlavorLabel" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.31, 0.26, 1)
+theme_override_font_sizes/font_size = 14
+text = "Flavor"
+autowrap_mode = 3
+
+[node name="AttackHeader" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+layout_mode = 2
+text = "ATTACK"
+label_settings = SubResource("LabelSettings_section")
+
+[node name="AttackLabel" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Attack"
+
+[node name="AttackDescriptionLabel" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.31, 0.26, 1)
+theme_override_font_sizes/font_size = 13
+text = "Description"
+autowrap_mode = 3
+
+[node name="AbilitiesHeader" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+layout_mode = 2
+text = "ABILITIES"
+label_settings = SubResource("LabelSettings_section")
+
+[node name="AbilitiesList" type="VBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="StatusHeader" type="Label" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+layout_mode = 2
+text = "BUFFS / DEBUFFS"
+label_settings = SubResource("LabelSettings_section")
+
+[node name="StatusList" type="VBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody/Top/RightScroll/Right"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Sep" type="HSeparator" parent="Center/Window/Layout/Content/Root/JobBody"]
+layout_mode = 2
+
+[node name="AssignedHeader" type="Label" parent="Center/Window/Layout/Content/Root/JobBody"]
+layout_mode = 2
+text = "ASSIGNED GIRLS (drag girls into the slots, drag them back to unassign)"
+label_settings = SubResource("LabelSettings_section")
+
+[node name="SlotsRow" type="HBoxContainer" parent="Center/Window/Layout/Content/Root/JobBody"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PoolHeader" type="Label" parent="Center/Window/Layout/Content/Root/JobBody"]
+layout_mode = 2
+text = "AVAILABLE"
+label_settings = SubResource("LabelSettings_section")
+
+[node name="PoolZone" parent="Center/Window/Layout/Content/Root/JobBody" instance=ExtResource("4_zone")]
+unique_name_in_owner = true
+layout_mode = 2

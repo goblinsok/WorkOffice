@@ -1,0 +1,215 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://UI/Menus/base_menu.tscn" id="1_base"]
+[ext_resource type="Script" path="res://UI/Menus/Player/employee_card.gd" id="2_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.98, 0.98, 0.97, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.33, 0.55, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_strip"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.33, 0.55, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_photo"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.85, 0.88, 0.92, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.33, 0.55, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_key"]
+font_size = 12
+font_color = Color(0.4, 0.45, 0.55, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_value"]
+font_size = 17
+font_color = Color(0.1, 0.12, 0.18, 1)
+
+[node name="EmployeeCard" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+title = "EMPLOYEE CARD"
+
+[node name="Window" parent="Center" index="0"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Card" type="VBoxContainer" parent="Center/Window/Layout/Content" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Strip" type="PanelContainer" parent="Center/Window/Layout/Content/Card"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_strip")
+
+[node name="Company" type="Label" parent="Center/Window/Layout/Content/Card/Strip"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "OFFICEWORK INC.  ·  STAFF"
+
+[node name="Body" type="HBoxContainer" parent="Center/Window/Layout/Content/Card"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="PhotoFrame" type="PanelContainer" parent="Center/Window/Layout/Content/Card/Body"]
+custom_minimum_size = Vector2(120, 150)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_photo")
+
+[node name="Photo" type="TextureRect" parent="Center/Window/Layout/Content/Card/Body/PhotoFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PhotoPlaceholder" type="Label" parent="Center/Window/Layout/Content/Card/Body/PhotoFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.5, 0.6, 1)
+text = "PHOTO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Fields" type="GridContainer" parent="Center/Window/Layout/Content/Card/Body"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="NameKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "NAME"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="NameValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="PositionKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "POSITION"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="PositionValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="IdKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "EMPLOYEE ID"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="IdValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="DaysKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "DAY OF EMPLOYMENT"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="DaysValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="MoneyKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "MONEY"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="MoneyValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="FameKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "FAME"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="FameValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="CharismaKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "CHARISMA"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="CharismaValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="ManagementKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "MANAGEMENT"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="ManagementValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="ActionsKey" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+layout_mode = 2
+text = "ACTIONS TODAY"
+label_settings = SubResource("LabelSettings_key")
+
+[node name="ActionsValue" type="Label" parent="Center/Window/Layout/Content/Card/Body/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="Barcode" type="Label" parent="Center/Window/Layout/Content/Card"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_font_sizes/font_size = 26
+text = "| || ||| | || |||| | ||| || | |||| || | ||| | || ||"
+horizontal_alignment = 1

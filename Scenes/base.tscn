@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://65y7e84d5swh"]
+[gd_scene load_steps=5 format=3 uid="uid://65y7e84d5swh"]
 
 [ext_resource type="Script" uid="uid://cl8qp7r2ffram" path="res://Scenes/base.gd" id="1_31hd7"]
 [ext_resource type="PackedScene" uid="uid://ck80v31pq671x" path="res://UI/Game/game_ui.tscn" id="3_6qyon"]
-[ext_resource type="PackedScene" uid="uid://dilancoh1gnht" path="res://Scenes/Girls/Location/WorkingArea/Lidya/lidya_WA_standing.tscn" id="3_jdayy"]
+[ext_resource type="PackedScene" path="res://UI/Interaction/interaction_menu.tscn" id="4_menu"]
+[ext_resource type="PackedScene" path="res://UI/Dialog/dialog_panel.tscn" id="5_dialog"]
+[ext_resource type="PackedScene" path="res://UI/Battle/battle_window.tscn" id="6_battle"]
 
 [node name="Base" type="Control"]
 layout_mode = 3
@@ -13,12 +15,19 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 script = ExtResource("1_31hd7")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
 [node name="GameUi" parent="." instance=ExtResource("3_6qyon")]
+
+[node name="InteractionMenu" parent="." instance=ExtResource("4_menu")]
+
+[node name="DialogPanel" parent="." instance=ExtResource("5_dialog")]
+
+[node name="BattleWindow" parent="." instance=ExtResource("6_battle")]
 
 [node name="LocationControl" type="Control" parent="."]
 layout_mode = 1
@@ -27,18 +36,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="LocationBlackFade" type="ColorRect" parent="LocationControl"]
-unique_name_in_owner = true
-modulate = Color(0, 0, 0, 0)
-z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
+mouse_filter = 2
 
 [node name="LocationCenter" type="CenterContainer" parent="LocationControl"]
 unique_name_in_owner = true
@@ -50,7 +48,4 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="LidyaLocation" parent="LocationControl/LocationCenter" instance=ExtResource("3_jdayy")]
-z_index = 2
-position = Vector2(312, 29)
+mouse_filter = 2

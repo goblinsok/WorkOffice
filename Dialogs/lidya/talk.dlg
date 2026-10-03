@@ -1,0 +1,35 @@
+# Lidya - "Talk" interaction.
+# Entry point is the top of the file (no label given in talk.tres).
+
+if not flag("met_lidya")
+	=> first_meeting
+if girl.affection >= 10
+	=> close
+=> casual
+
+~ first_meeting
+do set_flag("met_lidya")
+Lidya: Oh! You must be the new manager.
+Lidya: I'm Lidya. I handle the reports around here.
+- Nice to meet you, Lidya.
+	Lidya: Likewise! I hope we'll work well together.
+	do add_stat("affection", 1)
+- Reports? Show me later.
+	Lidya: ...Sure. Later.
+Lidya: I should get back to work.
+
+~ casual
+Lidya: Hey, {player.display_name}. Need something?
+- How is work going?
+	Lidya: Busy, as always. But I'm managing.
+- You look tired. [if girl.energy < 50]
+	Lidya: Is it that obvious? I'll grab a coffee.
+	do add_stat("energy", 10)
+- Just checking on you.
+	Lidya: That's sweet of you.
+	do add_stat("affection", 1)
+- Nothing, never mind. => END
+
+~ close
+Lidya: There you are! I was hoping you'd stop by.
+Lidya: Affection is at {girl.affection}. Placeholder for the higher-affection branch.
