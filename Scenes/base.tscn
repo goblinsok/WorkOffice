@@ -1,10 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://65y7e84d5swh"]
+[gd_scene load_steps=6 format=3 uid="uid://65y7e84d5swh"]
 
 [ext_resource type="Script" uid="uid://cl8qp7r2ffram" path="res://Scenes/base.gd" id="1_31hd7"]
 [ext_resource type="PackedScene" uid="uid://ck80v31pq671x" path="res://UI/Game/game_ui.tscn" id="3_6qyon"]
 [ext_resource type="PackedScene" path="res://UI/Interaction/interaction_menu.tscn" id="4_menu"]
 [ext_resource type="PackedScene" path="res://UI/Dialog/dialog_panel.tscn" id="5_dialog"]
 [ext_resource type="PackedScene" path="res://UI/Battle/battle_window.tscn" id="6_battle"]
+[ext_resource type="PackedScene" path="res://UI/Cutscene/cutscene_overlay.tscn" id="7_cutscene"]
 
 [node name="Base" type="Control"]
 layout_mode = 3
@@ -28,6 +29,8 @@ anchor_mode = 0
 [node name="DialogPanel" parent="." instance=ExtResource("5_dialog")]
 
 [node name="BattleWindow" parent="." instance=ExtResource("6_battle")]
+
+[node name="CutsceneOverlay" parent="." instance=ExtResource("7_cutscene")]
 
 [node name="LocationControl" type="Control" parent="."]
 layout_mode = 1

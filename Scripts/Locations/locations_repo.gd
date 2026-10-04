@@ -6,7 +6,7 @@ class_name LocationsRepo extends Resource
 @export var starting_location: LocationInfo
 
 
-func get_by_id(location_id: StringName) -> LocationInfo:
+func get_by_id(location_id: Ids.Location) -> LocationInfo:
 	for location in locations:
 		if location.id == location_id:
 			return location

@@ -183,6 +183,7 @@ func _wait(seconds: float) -> void:
 
 
 func _on_root_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton and event.pressed \
+			and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
 		root.accept_event()
 		speed = FAST_SPEED

@@ -3,7 +3,7 @@ class_name GirlDropZone extends PanelContainer
 ## "available" pool (dropping there unassigns). The zone only reports the drop;
 ## the owning menu decides what it means.
 
-signal girl_dropped(girl_id: StringName, slot_index: int)
+signal girl_dropped(girl_id: Ids.Girl, slot_index: int)
 
 const POOL := -1
 

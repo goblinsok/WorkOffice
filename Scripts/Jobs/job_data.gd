@@ -31,8 +31,8 @@ signal hp_changed(hp: int, max_hp: int)
 @export var reward_money: int = 0
 @export var reward_fame: int = 0
 
-## Runtime: girl id per slot, &"" for an empty slot.
-var assigned: Array[StringName] = []
+## Runtime: girl per slot, Ids.Girl.NONE for an empty slot.
+var assigned: Array[Ids.Girl] = []
 var completed: bool = false
 
 
@@ -50,34 +50,34 @@ func get_debuffs() -> Array[StatusEffectData]:
 
 
 ## Sum of a stat modifier over all active status effects.
-func get_modifier(stat: StringName) -> int:
+func get_modifier(modifier: Ids.BossModifier) -> int:
 	var total := 0
 	for effect in status_effects:
-		total += effect.get_modifier(stat)
+		total += effect.get_modifier(modifier)
 	return total
 
 
 func get_total_attack() -> int:
-	return maxi(attack + get_modifier(&"attack"), 0)
+	return maxi(attack + get_modifier(Ids.BossModifier.ATTACK), 0)
 
 
 # ---------------------------------------------------------------- assignment
 
-func get_slot(slot: int) -> StringName:
+func get_slot(slot: int) -> Ids.Girl:
 	_ensure_slots()
 	return assigned[slot]
 
 
-func is_assigned(girl_id: StringName) -> bool:
+func is_assigned(girl_id: Ids.Girl) -> bool:
 	_ensure_slots()
-	return girl_id in assigned
+	return girl_id != Ids.Girl.NONE and girl_id in assigned
 
 
 ## Puts a girl in a slot. If she was in another slot, the girls swap places.
 ## A girl displaced from the pool side goes back to the pool.
-func assign(girl_id: StringName, slot: int) -> void:
+func assign(girl_id: Ids.Girl, slot: int) -> void:
 	_ensure_slots()
-	if slot < 0 or slot >= max_assigned:
+	if girl_id == Ids.Girl.NONE or slot < 0 or slot >= max_assigned:
 		return
 	var previous_slot := assigned.find(girl_id)
 	var displaced := assigned[slot]
@@ -87,11 +87,13 @@ func assign(girl_id: StringName, slot: int) -> void:
 	assignment_changed.emit()
 
 
-func unassign(girl_id: StringName) -> void:
+func unassign(girl_id: Ids.Girl) -> void:
 	_ensure_slots()
+	if girl_id == Ids.Girl.NONE:
+		return
 	var slot := assigned.find(girl_id)
 	if slot >= 0:
-		assigned[slot] = &""
+		assigned[slot] = Ids.Girl.NONE
 		assignment_changed.emit()
 
 
@@ -105,7 +107,7 @@ func get_assigned_girls(repo: GirlsRepo) -> Array[GirlInfo]:
 	_ensure_slots()
 	var result: Array[GirlInfo] = []
 	for girl_id in assigned:
-		if not girl_id.is_empty():
+		if girl_id != Ids.Girl.NONE:
 			var girl := repo.get_by_id(girl_id)
 			if girl:
 				result.append(girl)
@@ -114,4 +116,4 @@ func get_assigned_girls(repo: GirlsRepo) -> Array[GirlInfo]:
 
 func _ensure_slots() -> void:
 	while assigned.size() < max_assigned:
-		assigned.append(&"")
+		assigned.append(Ids.Girl.NONE)

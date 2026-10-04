@@ -1,6 +1,7 @@
 extends Node
 
 ## Phases of a single day. Values are sequential indexes starting at 0.
+## TimeCondition's checkboxes follow this order (bit i = value i); update them together.
 enum TIME_STATE {
 	MORNING,
 	AFTERNOON,
@@ -8,6 +9,7 @@ enum TIME_STATE {
 }
 
 ## Days of the week. Values are sequential indexes starting at 0.
+## TimeCondition's checkboxes follow this order (bit i = value i); update them together.
 enum WEEK_STATE {
 	MONDAY,
 	TUESDAY,

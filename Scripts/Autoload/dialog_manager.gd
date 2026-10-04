@@ -37,6 +37,14 @@ func start(path: String, label: String = "", context: InteractionContext = null)
 		await dialog_finished
 
 
+## Ends the running dialog immediately (used when a cutscene is skipped).
+func stop() -> void:
+	if not is_active():
+		return
+	_runner.stop()
+	dialog_finished.emit()
+
+
 ## Moves to the next line. Called by the UI when the player clicks.
 func advance() -> void:
 	if not is_active() or _runner.is_waiting_for_choice():

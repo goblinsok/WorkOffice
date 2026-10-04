@@ -2,48 +2,45 @@
 
 [ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="1_location_i"]
 [ext_resource type="PackedScene" uid="uid://bgvnn500pe0pw" path="res://Scenes/Locations/Gym/gym_scene.tscn" id="2_gym_scene"]
-[ext_resource type="Resource" path="res://Resources/Interactions/talk.tres" id="3_talk"]
-[ext_resource type="Resource" path="res://Resources/Interactions/look.tres" id="4_look"]
 [ext_resource type="Script" uid="uid://bqdkh6nuj0f7e" path="res://Scripts/Interactions/interaction_data.gd" id="5_interactio"]
-[ext_resource type="Script" path="res://Scripts/Locations/poi_girl_setup.gd" id="6_poi_girl_s"]
-[ext_resource type="Script" path="res://Scripts/Locations/poi_info.gd" id="7_poi_info"]
-[ext_resource type="Resource" uid="uid://dqof06xxv24uq" path="res://Resources/Interactions/reward.tres" id="8_reward"]
+[ext_resource type="Script" uid="uid://4qiqxpnmdiy4" path="res://Scripts/Locations/poi_girl_setup.gd" id="6_poi_girl_s"]
+[ext_resource type="Script" uid="uid://dj1alukisn32v" path="res://Scripts/Locations/poi_info.gd" id="7_poi_info"]
+[ext_resource type="Resource" path="res://Resources/Interactions/lidya/reward.tres" id="lidya_reward"]
+[ext_resource type="Resource" path="res://Resources/Interactions/nelle/reward.tres" id="nelle_reward"]
 
 [sub_resource type="Resource" id="Resource_1"]
 script = ExtResource("6_poi_girl_s")
-girl_id = &"lidya"
+girl = 1
 animation = &"Jumping"
-interactions = Array[ExtResource("5_interactio")]([ExtResource("3_talk"), ExtResource("4_look")])
 
 [sub_resource type="Resource" id="Resource_2"]
 script = ExtResource("6_poi_girl_s")
-girl_id = &"nelle"
+girl = 2
 animation = &"Jumping"
-interactions = Array[ExtResource("5_interactio")]([ExtResource("3_talk"), ExtResource("4_look")])
 
 [sub_resource type="Resource" id="Resource_3"]
 script = ExtResource("7_poi_info")
-id = &"treadmill"
+id = 301
 girl_setups = Array[ExtResource("6_poi_girl_s")]([SubResource("Resource_1"), SubResource("Resource_2")])
 
 [sub_resource type="Resource" id="Resource_4"]
 script = ExtResource("6_poi_girl_s")
-girl_id = &"lidya"
-interactions = Array[ExtResource("5_interactio")]([ExtResource("3_talk"), ExtResource("4_look"), ExtResource("8_reward")])
+girl = 1
+extra_interactions = Array[ExtResource("5_interactio")]([ExtResource("lidya_reward")])
 
 [sub_resource type="Resource" id="Resource_5"]
 script = ExtResource("6_poi_girl_s")
-girl_id = &"nelle"
-interactions = Array[ExtResource("5_interactio")]([ExtResource("3_talk"), ExtResource("4_look"), ExtResource("8_reward")])
+girl = 2
+extra_interactions = Array[ExtResource("5_interactio")]([ExtResource("nelle_reward")])
 
 [sub_resource type="Resource" id="Resource_6"]
 script = ExtResource("7_poi_info")
-id = &"mats"
+id = 302
 girl_setups = Array[ExtResource("6_poi_girl_s")]([SubResource("Resource_4"), SubResource("Resource_5")])
 
 [resource]
 script = ExtResource("1_location_i")
-id = &"gym"
+id = 3
 display_name = "Gym"
 scene = ExtResource("2_gym_scene")
 points_of_interest = Array[ExtResource("7_poi_info")]([SubResource("Resource_3"), SubResource("Resource_6")])

@@ -9,7 +9,7 @@ starting with `#` are ignored.
 | Syntax | Meaning |
 |---|---|
 | `~ label` | Starts a labeled section, which must not be indented. The dialog **ends** when execution reaches the next label; it doesn't fall through. |
-| `Speaker: text` | A spoken line. The speaker can be a girl id (`lidya`/`Lidya`, looked up in GirlsRepo), `girl` (the girl in context), `player`, or any other literal name. |
+| `Speaker: text` | A spoken line. The speaker can be a girl key (`lidya`/`Lidya`, the lowercase `Ids.Girl` key), `girl` (the girl in context), `player`, or any other literal name. A name within 2 letters of a girl key (`Lydia`) is reported by `ContentValidator`. |
 | `text` | Narration: no name box. |
 | `- choice` | A choice. Consecutive `-` lines at the same indent form one menu. The choice's body is the block indented under it; after the body runs, execution continues after the menu. |
 | `- choice [if expr]` | The choice is hidden when the expression is false. |
@@ -24,14 +24,15 @@ starting with `#` are ignored.
 Expressions use Godot's `Expression` class and are evaluated by `GameExpression`.
 
 - **Variables:** `girl` (GirlInfo), `player` (PlayerInfo), `world` (WorldInfo), `location` (LocationInfo), `name` (the girl's display name).
-- **Functions** (public methods of `InteractionContext`): `add_stat("affection", 1)`, `stat("energy")`, `add_money(-10)`, `flag("met")`, `set_flag("met")`, `set_flag("mood", "happy")`, `bubble("text")`.
+- **Functions** (public methods of `InteractionContext`): `add_stat("affection", 1)`, `stat("energy")` (stat names are lowercase `Ids.Stat` keys, checked by `ContentValidator`), `add_money(-10)`, `flag("met")`, `set_flag("met")`, `set_flag("mood", "happy")`, `bubble("text")`, and in cutscene dialogs `cancel_action()` / `proceed_action()` (whether the triggering interaction runs afterwards).
 
 Expose a new function by adding a public method to `InteractionContext`.
 
 ## Where dialogs are used
 
-`DialogEffect.dialog_path` can contain `{girl}`, which is replaced with the girl id. That way a
-single `talk.tres` interaction serves every girl through `res://Dialogs/{girl}/talk.dlg`.
+Every girl has her own interaction files (`Resources/Interactions/<key>/talk.tres`), which point at her
+dialog directly (`res://Dialogs/lidya/talk.dlg`). `DialogEffect.dialog_path` can still contain `{girl}`, which
+is replaced with the girl key (`lidya`), for an interaction shared on purpose.
 
 Speaker detection: a line is treated as spoken when it starts with `Word:` (letters, digits,
 `_` or spaces, up to 24 characters) followed by a colon. Narration therefore must not start that

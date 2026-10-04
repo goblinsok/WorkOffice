@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_location_i")
-id = &"kitchen"
+id = 2
 display_name = "Kitchen"
 points_of_interest = Array[ExtResource("2_poi_info")]([])
 metadata/_custom_type_script = "uid://im47ahwqfmn4"

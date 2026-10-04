@@ -12,9 +12,6 @@
 layer = 10
 script = ExtResource("1_3fiko")
 
-[node name="Map" parent="." instance=ExtResource("3_vhnjf")]
-unique_name_in_owner = true
-
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
@@ -90,6 +87,7 @@ text = "Actions: ●●●"
 horizontal_alignment = 2
 
 [node name="TopMenu" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 
@@ -145,6 +143,12 @@ focus_mode = 0
 theme = ExtResource("2_a3bln")
 text = "Job"
 
+[node name="WaitButton" type="Button" parent="VBoxContainer/TopMenu/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_a3bln")
+text = "Wait"
+
 [node name="Menus" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -167,5 +171,9 @@ unique_name_in_owner = true
 layout_mode = 1
 
 [node name="JobMenu" parent="Menus" instance=ExtResource("7_job")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="Map" parent="Menus" instance=ExtResource("3_vhnjf")]
 unique_name_in_owner = true
 layout_mode = 1

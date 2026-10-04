@@ -1,16 +1,17 @@
 extends CanvasLayer
 ## HUD: top bar (money, date, actions) and the toolbar. menu_buttons maps each
-## toolbar button to a BaseMenu, and only one menu is open at a time.
+## toolbar button to a BaseMenu (the map included), and only one menu is open at a time.
 
 @onready var money_label: Label = %MoneyLabel
 @onready var date_label: Label = %DateLabel
 @onready var actions_label: Label = %ActionsLabel
 
-@onready var map_button: Button = %MapButton
-@onready var map: CanvasLayer = %Map
+@onready var wait_button: Button = %WaitButton
+@onready var top_menu: Control = %TopMenu
 
 ## Toolbar button -> menu it toggles. Only one menu is open at a time.
 @onready var menu_buttons: Dictionary[Button, BaseMenu] = {
+	%MapButton: %Map,
 	%GirlsButton: %GirlsMenu,
 	%ItemsButton: %InventoryMenu,
 	%CardButton: %EmployeeCard,
@@ -28,11 +29,19 @@ func _ready() -> void:
 	update_actions(player.actions, player.max_actions)
 	update_date()
 
-	map_button.pressed.connect(open_map)
-	map.closed.connect(func(): map_button.disabled = false)
-
 	for button in menu_buttons:
 		button.pressed.connect(toggle_menu.bind(menu_buttons[button]))
+
+	wait_button.pressed.connect(func(): TimeManager.spend_actions())
+
+	# Cutscenes: only the top info bar stays; the toolbar and menus (the map too) go away.
+	GlobalSignals.cutscene_started.connect(_on_cutscene_started)
+	GlobalSignals.cutscene_finished.connect(func(_cutscene: CutsceneData): top_menu.visible = true)
+
+
+func _on_cutscene_started(_cutscene: CutsceneData) -> void:
+	top_menu.visible = false
+	close_menus()
 
 
 func toggle_menu(menu: BaseMenu) -> void:
@@ -45,12 +54,6 @@ func toggle_menu(menu: BaseMenu) -> void:
 func close_menus() -> void:
 	for menu: BaseMenu in menu_buttons.values():
 		menu.close()
-
-
-func open_map() -> void:
-	close_menus()
-	map.show_map()
-	map_button.disabled = true
 
 
 func update_money() -> void:

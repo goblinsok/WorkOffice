@@ -57,7 +57,7 @@ func show_girl(girl: GirlInfo) -> void:
 	_refresh_stats()
 
 
-func _refresh_stats(_stat: StringName = &"", _value: int = 0) -> void:
+func _refresh_stats(_stat: Ids.Stat = Ids.Stat.NONE, _value: int = 0) -> void:
 	var girl := _current
 	energy_bar.set_values(girl.energy, girl.max_energy)
 	affection_bar.set_values(girl.affection, girl.max_affection)
@@ -92,7 +92,7 @@ func _describe_location(girl: GirlInfo) -> String:
 	var placement: GirlPlacement = GameState.world_info.placements.get(girl.id)
 	if placement == null:
 		return "Unknown"
-	return "%s (%s)" % [placement.location.display_name, String(placement.poi.id).capitalize()]
+	return "%s (%s)" % [placement.location.display_name, Ids.poi_label(placement.poi.id)]
 
 
 func _describe_job(girl: GirlInfo) -> String:

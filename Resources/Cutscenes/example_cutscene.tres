@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="CutsceneData" load_steps=16 format=3 uid="uid://cohubi2kubmgn"]
+
+[ext_resource type="Script" uid="uid://bwndxicnnty6q" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="1_jol1s"]
+[ext_resource type="Script" uid="uid://b1oi21nceco6r" path="res://Scripts/Cutscenes/cutscene_data.gd" id="2_gclnm"]
+[ext_resource type="Script" uid="uid://dodamwals3ney" path="res://Scripts/Cutscenes/cutscene_step.gd" id="3_cvhmr"]
+[ext_resource type="Script" uid="uid://d1q3d02gu7jaa" path="res://Scripts/Cutscenes/cutscene_girl_staging.gd" id="4_jol1s"]
+[ext_resource type="Texture2D" uid="uid://b76ycqmthf25k" path="res://Assets/Images/firework.webp" id="5_gclnm"]
+[ext_resource type="Script" uid="uid://dhhp5uc3l81y3" path="res://Scripts/Cutscenes/steps/cutscene_background_step.gd" id="6_5lti0"]
+[ext_resource type="Resource" uid="uid://crduu3gbrmk27" path="res://Resources/Locations/gym_area_info.tres" id="6_cvhmr"]
+[ext_resource type="Script" uid="uid://bqeeasm6jduhw" path="res://Scripts/Cutscenes/steps/cutscene_dialog_step.gd" id="7_jol1s"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/girl_stat_condition.gd" id="8_statcond"]
+
+[sub_resource type="Resource" id="Resource_6m2nb"]
+script = ExtResource("6_5lti0")
+image = ExtResource("5_gclnm")
+metadata/_custom_type_script = "uid://dhhp5uc3l81y3"
+
+[sub_resource type="Resource" id="Resource_jol1s"]
+script = ExtResource("7_jol1s")
+dialog_path = "res://Dialogs/cutscenes/example.dlg"
+label = "part1"
+metadata/_custom_type_script = "uid://bqeeasm6jduhw"
+
+[sub_resource type="Resource" id="Resource_gclnm"]
+script = ExtResource("4_jol1s")
+girl = 1
+poi = 301
+metadata/_custom_type_script = "uid://d1q3d02gu7jaa"
+
+[sub_resource type="Resource" id="Resource_cvhmr"]
+script = ExtResource("6_5lti0")
+location = ExtResource("6_cvhmr")
+girls = Array[ExtResource("4_jol1s")]([SubResource("Resource_gclnm")])
+metadata/_custom_type_script = "uid://dhhp5uc3l81y3"
+
+[sub_resource type="Resource" id="Resource_vqfds"]
+script = ExtResource("7_jol1s")
+dialog_path = "res://Dialogs/cutscenes/example.dlg"
+label = "part2"
+metadata/_custom_type_script = "uid://bqeeasm6jduhw"
+
+[sub_resource type="Resource" id="Resource_nelle10"]
+script = ExtResource("8_statcond")
+girl = 2
+stat = 3
+amount = 10
+
+[resource]
+script = ExtResource("2_gclnm")
+id = &"example"
+trigger_after_action = true
+conditions = Array[ExtResource("1_jol1s")]([SubResource("Resource_nelle10")])
+steps = Array[ExtResource("3_cvhmr")]([SubResource("Resource_6m2nb"), SubResource("Resource_jol1s"), SubResource("Resource_cvhmr"), SubResource("Resource_vqfds")])

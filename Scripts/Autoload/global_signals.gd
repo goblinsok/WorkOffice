@@ -21,3 +21,9 @@ signal girls_placed()
 signal girl_clicked(view: BaseGirlLocation)
 signal interaction_started(interaction: InteractionData, context: InteractionContext)
 signal interaction_finished(interaction: InteractionData, context: InteractionContext)
+
+# --- Cutscenes ---
+signal cutscene_started(cutscene: CutsceneData)
+signal cutscene_finished(cutscene: CutsceneData)
+## A cutscene background step wants to change the view. null = restore the real game view.
+signal cutscene_background_requested(step: CutsceneBackgroundStep)

@@ -1,8 +1,11 @@
-[gd_resource type="Resource" script_class="GirlInfo" load_steps=5 format=3 uid="uid://dfnqs5nss5hqp"]
+[gd_resource type="Resource" script_class="GirlInfo" load_steps=8 format=3 uid="uid://dfnqs5nss5hqp"]
 
 [ext_resource type="Script" uid="uid://bcfu86pek5luo" path="res://Scripts/Girls/girl_info.gd" id="1_girl_info"]
 [ext_resource type="PackedScene" uid="uid://dilancoh1gnht" path="res://Scenes/Girls/Location/WorkingArea/Lidya/lidya_WA_standing.tscn" id="2_lidya_WA_s"]
 [ext_resource type="Texture2D" uid="uid://cedigx53fp3fo" path="res://Assets/Characters/Girls/Lidya/Sheet.png" id="3_Sheet"]
+[ext_resource type="Script" uid="uid://bqdkh6nuj0f7e" path="res://Scripts/Interactions/interaction_data.gd" id="4_interaction"]
+[ext_resource type="Resource" path="res://Resources/Interactions/lidya/talk.tres" id="5_talk"]
+[ext_resource type="Resource" path="res://Resources/Interactions/lidya/look.tres" id="6_look"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1"]
 atlas = ExtResource("3_Sheet")
@@ -10,10 +13,11 @@ region = Rect2(110, 30, 220, 280)
 
 [resource]
 script = ExtResource("1_girl_info")
-id = &"lidya"
+id = 1
 display_name = "Lidya"
 name_color = Color(0.95, 0.7, 0.5, 1)
 location_scene = ExtResource("2_lidya_WA_s")
+interactions = Array[ExtResource("4_interaction")]([ExtResource("5_talk"), ExtResource("6_look")])
 portrait = SubResource("AtlasTexture_1")
 role = "Accountant"
 bio = "Meticulous with numbers, hopeless with printers. Keeps a secret stash of snacks in the bottom drawer."

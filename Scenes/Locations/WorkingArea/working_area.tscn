@@ -13,10 +13,10 @@ script = ExtResource("2_3kcc6")
 position = Vector2(-180, 40)
 scale = Vector2(0.55, 0.55)
 script = ExtResource("3_poi")
-poi_id = &"desk_left"
+poi = 101
 
 [node name="DeskRight" type="Marker2D" parent="Points"]
 position = Vector2(180, 40)
 scale = Vector2(0.55, 0.55)
 script = ExtResource("3_poi")
-poi_id = &"desk_right"
+poi = 102

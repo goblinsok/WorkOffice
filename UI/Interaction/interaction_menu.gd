@@ -71,7 +71,9 @@ func _on_option_pressed(interaction: InteractionData) -> void:
 
 
 func _on_blocker_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed:
+	# Only real clicks: the mouse wheel also sends pressed InputEventMouseButtons.
+	if event is InputEventMouseButton and event.pressed \
+			and event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
 		blocker.accept_event()
 		close()
 

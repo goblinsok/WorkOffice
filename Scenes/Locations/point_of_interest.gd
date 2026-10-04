@@ -1,20 +1,20 @@
 @tool
 class_name PointOfInterest extends Marker2D
-## Marks where a girl stands in a location scene. poi_id must match a PoiInfo.id
+## Marks where a girl stands in a location scene. poi must match a PoiInfo.id
 ## in the location's LocationInfo resource. Spawned girls become children of this node,
 ## so the marker's position and scale control how the girl appears.
 
-@export var poi_id: StringName:
+@export var poi: Ids.Poi = Ids.Poi.NONE:
 	set(value):
-		poi_id = value
+		poi = value
 		update_configuration_warnings()
 
 var girl_view: BaseGirlLocation
 
 
 func _get_configuration_warnings() -> PackedStringArray:
-	if poi_id.is_empty():
-		return ["poi_id is empty. It must match a PoiInfo.id in the location's LocationInfo."]
+	if poi == Ids.Poi.NONE:
+		return ["poi is NONE. It must match a PoiInfo.id in the location's LocationInfo."]
 	return []
 
 
@@ -28,7 +28,7 @@ func spawn(placement: GirlPlacement) -> void:
 	clear()
 	var scene := placement.setup.get_scene(placement.girl)
 	if scene == null:
-		push_error("No scene for girl '%s' at POI '%s'" % [placement.girl.id, poi_id])
+		push_error("No scene for girl '%s' at POI '%s'" % [Ids.name_of(Ids.Girl, placement.girl.id), Ids.name_of(Ids.Poi, poi)])
 		return
 	girl_view = scene.instantiate()
 	add_child(girl_view)

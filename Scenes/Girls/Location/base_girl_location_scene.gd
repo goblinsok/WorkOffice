@@ -16,6 +16,7 @@ var placement: GirlPlacement
 
 
 func _ready() -> void:
+	add_to_group(&"girl_views")
 	select.mouse_entered.connect(_set_hovered.bind(true))
 	select.mouse_exited.connect(_set_hovered.bind(false))
 	select.input_event.connect(_on_select_input_event)

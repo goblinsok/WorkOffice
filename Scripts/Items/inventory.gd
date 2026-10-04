@@ -104,6 +104,7 @@ func use_at(index: int, context: InteractionContext) -> bool:
 	if usable.consumed:
 		remove_at(index, 1)
 	await usable.use(context)
+	await CutsceneManager.try_trigger_after_action(context)
 	if usable.action_cost > 0:
 		await TimeManager.spend_actions(usable.action_cost)
 	return true

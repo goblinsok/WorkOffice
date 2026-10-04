@@ -21,14 +21,14 @@ hp_threshold_percent = 30
 script = ExtResource("3_status_eff")
 display_name = "Overheating"
 description = "The CPU runs hot. +5 Attack."
-modifiers = Dictionary[StringName, int]({&"attack": 5})
+modifiers = Dictionary[int, int]({1: 5})
 
 [sub_resource type="Resource" id="Resource_4"]
 script = ExtResource("3_status_eff")
 display_name = "Loose Screws"
 description = "The case barely holds together. Takes +2 damage from every hit."
 is_debuff = true
-modifiers = Dictionary[StringName, int]({&"damage_taken": 2})
+modifiers = Dictionary[int, int]({2: 2})
 
 [resource]
 script = ExtResource("1_job_data")

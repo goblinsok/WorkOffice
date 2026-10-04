@@ -125,7 +125,9 @@ func _resolve_speaker(line: DialogLine) -> void:
 	if speaker_id == "girl":
 		girl = context.girl
 	else:
-		girl = GameState.girls.get_by_id(StringName(speaker_id.to_lower()))
+		var girl_id := Ids.girl_from_key(speaker_id)
+		if girl_id != Ids.Girl.NONE:
+			girl = GameState.girls.get_by_id(girl_id)
 	if girl:
 		line.speaker_name = girl.display_name
 		line.speaker_color = girl.name_color

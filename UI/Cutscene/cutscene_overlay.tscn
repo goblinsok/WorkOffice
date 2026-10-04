@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://UI/Cutscene/cutscene_overlay.gd" id="1_overlay"]
+[ext_resource type="Theme" uid="uid://bkyg86b6c0hib" path="res://UI/Themes/game_ui.tres" id="2_theme"]
+
+[node name="CutsceneOverlay" type="Node"]
+script = ExtResource("1_overlay")
+
+[node name="ImageLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 1
+visible = false
+
+[node name="StageImage" type="TextureRect" parent="ImageLayer"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="InputLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 25
+visible = false
+
+[node name="Blocker" type="Control" parent="InputLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SkipLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 35
+visible = false
+
+[node name="SkipButton" type="Button" parent="SkipLayer"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -112.0
+offset_top = 58.0
+offset_right = -12.0
+offset_bottom = 94.0
+grow_horizontal = 0
+focus_mode = 0
+theme = ExtResource("2_theme")
+text = "Skip ▶▶"

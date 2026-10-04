@@ -68,7 +68,7 @@ func run() -> Array[BattleEvent]:
 func apply_results() -> void:
 	job.set_hp(boss_hp)
 	for unit in units:
-		unit.girl.set_stat(&"energy", unit.energy)
+		unit.girl.set_stat(Ids.Stat.ENERGY, unit.energy)
 
 
 ## Used by BossAbility placeholders to report that they fired.
@@ -112,7 +112,7 @@ func _girl_attack(unit: BattleUnit) -> void:
 
 func _roll_damage(unit: BattleUnit) -> int:
 	var multiplier := _rng.randf_range(1.0 - DAMAGE_VARIANCE, 1.0 + DAMAGE_VARIANCE)
-	var damage := roundi(unit.attack * multiplier) + job.get_modifier(&"damage_taken")
+	var damage := roundi(unit.attack * multiplier) + job.get_modifier(Ids.BossModifier.DAMAGE_TAKEN)
 	return maxi(damage, 1)
 
 

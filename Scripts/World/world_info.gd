@@ -8,8 +8,8 @@ var day_count: int = 0
 
 var current_location: LocationInfo
 
-## girl id -> placement for the current time phase.
-var placements: Dictionary[StringName, GirlPlacement] = {}
+## girl -> placement for the current time phase.
+var placements: Dictionary[Ids.Girl, GirlPlacement] = {}
 
 ## Generic story/progress flags usable from dialogs and conditions.
 var flags: Dictionary = {}

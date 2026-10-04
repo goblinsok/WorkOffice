@@ -3,8 +3,8 @@
 Also covers `Scripts/Battle`, `UI/Battle` and `UI/Menus/Job`.
 
 ## Data
-- `JobData` (`Resources/Jobs/*.tres`, listed in `jobs_repo.tres`): a boss. `hp` **persists between days** until 0, at which point `completed` is set and rewards are paid. `attack` drains energy from every assigned girl **once, at battle start**. It also has `abilities`, `status_effects` and `max_assigned`. Assignment is runtime `assigned` slots: `assign` swaps, `unassign`, and `get_assigned_girls(repo)`.
-- `StatusEffectData`: buffs and debuffs with `modifiers`. The supported keys are `attack` and `damage_taken`; a new key needs handling in `BattleSimulation`.
+- `JobData` (`Resources/Jobs/*.tres`, listed in `jobs_repo.tres`): a boss. `hp` **persists between days** until 0, at which point `completed` is set and rewards are paid. `attack` drains energy from every assigned girl **once, at battle start**. It also has `abilities`, `status_effects` and `max_assigned`. Assignment is runtime `assigned` slots (`Ids.Girl`, `NONE` = empty): `assign` swaps, `unassign`, and `get_assigned_girls(repo)`.
+- `StatusEffectData`: buffs and debuffs with `modifiers: Dictionary[Ids.BossModifier, int]` (`ATTACK`, `DAMAGE_TAKEN`). A new modifier needs an `Ids.BossModifier` value and handling in `BattleSimulation`/`JobData`.
 - `BossAbility`: a **placeholder**. Its trigger (BATTLE_START / ROUND_START / LOW_HP) calls `activate(battle)`, which only logs an event. Subclass it to add mechanics.
 - `JobsRepo.get_current()` returns the first job that isn't completed.
 

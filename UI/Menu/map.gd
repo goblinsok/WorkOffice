@@ -1,35 +1,32 @@
-extends CanvasLayer
-## Map panel. Each button is bound to a location id. Buttons are disabled for the
-## current location and for locations that are not available (locked or without a scene).
+extends BaseMenu
+## Map panel that slides down from the top. It is a menu like the others (GameUi.menu_buttons):
+## the Map button toggles it, only one menu is open at a time, and Esc or a click outside closes it.
+## Each button is bound to a location. Buttons are disabled for the current location and for
+## locations that are not available (locked or without a scene).
 
-signal closed
+const SLIDE_TIME := 0.6
 
-@onready var panel: Panel = %Panel
-@onready var close_button: Button = %Close
+@onready var center: CenterContainer = %Center
 
-## location id -> button. Add an entry here when a new button is added to the map scene.
-@onready var location_buttons: Dictionary[StringName, Button] = {
-	&"working_area": %WorkingArea,
-	&"kitchen": %Kitchen,
-	&"gym": %Gym,
+## location -> button. Add an entry here when a new button is added to the map scene.
+@onready var location_buttons: Dictionary[Ids.Location, Button] = {
+	Ids.Location.WORKING_AREA: %WorkingArea,
+	Ids.Location.KITCHEN: %Kitchen,
+	Ids.Location.GYM: %Gym,
 }
 
-var y_starting: float
-var y_ending: float
-var is_open: bool = false
+var _rest_top: float
+var _rest_bottom: float
+var _slide: Tween
 
 
 func _ready() -> void:
-	visible = false
-
+	super._ready()
+	_rest_top = center.offset_top
+	_rest_bottom = center.offset_bottom
 	for location_id in location_buttons:
 		location_buttons[location_id].pressed.connect(_on_location_pressed.bind(location_id))
-	close_button.pressed.connect(close)
 	GlobalSignals.location_changed.connect(func(_location): refresh_buttons())
-	refresh_buttons()
-
-	y_starting = 0 - panel.global_position.y - panel.size.y
-	y_ending = panel.position.y
 
 
 func refresh_buttons() -> void:
@@ -39,38 +36,26 @@ func refresh_buttons() -> void:
 		location_buttons[location_id].disabled = location == null or not location.is_available() or location == current
 
 
-func show_map() -> void:
-	visible = true
-
-	var tween := create_tween()
-	tween.set_trans(Tween.TRANS_QUART)
-	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_property(panel, "position:y", y_ending, 0.6).from(y_starting)
-
-	await tween.finished
-	is_open = true
+func _on_open() -> void:
+	refresh_buttons()
 
 
-func _input(event: InputEvent) -> void:
-	if is_open and event is InputEventMouseButton and event.pressed:
-		var local_event := panel.make_input_local(event)
-		if not Rect2(Vector2.ZERO, panel.get_rect().size).has_point(local_event.position):
-			close()
+func _animate_open() -> void:
+	var distance := get_viewport_rect().size.y
+	if _slide:
+		_slide.kill()
+	_slide = create_tween().set_parallel().set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	_slide.tween_property(center, "offset_top", _rest_top, SLIDE_TIME).from(_rest_top - distance)
+	_slide.tween_property(center, "offset_bottom", _rest_bottom, SLIDE_TIME).from(_rest_bottom - distance)
 
 
-func close() -> void:
-	if not is_open:
-		return
-	is_open = false
-
-	var tween := create_tween()
-	tween.tween_property(panel, "position:y", y_starting, 0.2).from(y_ending)
-
-	await tween.finished
-	visible = false
-	closed.emit()
+func _on_close() -> void:
+	if _slide:
+		_slide.kill()
+	center.offset_top = _rest_top
+	center.offset_bottom = _rest_bottom
 
 
-func _on_location_pressed(location_id: StringName) -> void:
-	await close()
+func _on_location_pressed(location_id: Ids.Location) -> void:
+	close()
 	GlobalSignals.switch_location.emit(GameState.locations.get_by_id(location_id))

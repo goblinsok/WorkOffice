@@ -10,13 +10,14 @@ G="D:/MyGame/Godot_v4.5.1/Godot_v4.5.1-stable_win64_console.exe"
 "$G" --headless --path . --import                     # script/resource errors
 "$G" --headless --path . res://Tests/smoke_test.tscn  # end-to-end, prints PASS / N FAILURES
 ```
-Keep `Tests/smoke_test.gd` in sync with core flows. For visual checks, run a temporary scene that saves `get_viewport().get_texture().get_image()`, then delete it. **Only ever stop the Godot process you started (by PID). The user's editor may be open.**
+The smoke test also asserts `ContentValidator` finds no problems; in debug builds `GameState` prints them at startup as `Content: ...` errors. Keep `Tests/smoke_test.gd` in sync with core flows. For visual checks, run a temporary scene that saves `get_viewport().get_texture().get_image()`, then delete it. **Only ever stop the Godot process you started (by PID). The user's editor may be open.**
 
 ## Subsystem docs: read the one for the area you touch
 | Area | Doc | Code |
 |---|---|---|
 | Interactions, conditions/effects, expressions | `Scripts/Interactions/CLAUDE.md` | `Scripts/Interactions`, `Scripts/Core`, `UI/Interaction` |
 | Dialog scripts (`.dlg`) and the dialog runtime | `Dialogs/README.md`, `Scripts/Dialog/CLAUDE.md` | `Scripts/Dialog`, `UI/Dialog` |
+| Cutscenes (steps, triggers, proceed/cancel) | `Scripts/Cutscenes/CLAUDE.md` | `Scripts/Cutscenes`, `Scripts/Autoload/cutscene_manager.gd`, `UI/Cutscene` |
 | Locations, POIs, girl views, placement | `Scenes/Locations/CLAUDE.md` | `Scenes/`, `Scripts/Locations` |
 | Items and inventory | `Scripts/Items/CLAUDE.md` | `Scripts/Items`, `UI/Menus/Inventory` |
 | Jobs, boss battle, day end | `Scripts/Jobs/CLAUDE.md` | `Scripts/Jobs`, `Scripts/Battle`, `UI/Battle`, `UI/Menus/Job` |
@@ -33,6 +34,7 @@ Autoloads, in load order:
 - `Enums`
 - `ScreenFader`: `await fade_out()` / `fade_in()`
 - `DialogManager`
+- `CutsceneManager`: plays `CutsceneData`; `InteractionManager.run()` auto-triggers `interaction:<id>` cutscenes
 - `InteractionManager`
 - `TimeManager`: actions, phases, and `register_day_end_step()`
 - `JobManager`
@@ -42,7 +44,7 @@ Autoloads, in load order:
 ## Conventions
 - Static typing everywhere. `class_name X extends Y` on one line. Use `@abstract` for bases that must be subclassed.
 - Node references use `@onready var x: T = %UniqueName`. Base scenes are named `base_*`, and variants inherit both the scene and the script.
-- Ids are lowercase `StringName`s (`&"working_area"`). Indent with tabs.
+- Girls, locations, POIs, girl stats, player stats and boss modifiers are identified by the enums in `Scripts/Core/ids.gd` (`Ids.Girl.LIDYA`). Values are explicit and never reordered or reused (`.tres` stores the int); read its header before adding or removing one. Other content ids (interactions, items, jobs, cutscenes) are lowercase `StringName`s (`&"talk"`). Indent with tabs.
 - Cross-system events go through `GlobalSignals`. Direct calls into manager autoloads are fine for commands.
 - Runtime state lives on the loaded `.tres` instances (not duplicated). That's fine at runtime, but a save system must serialize it.
 

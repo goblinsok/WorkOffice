@@ -45,6 +45,20 @@ var actions: int = 0:
 var inventory: Inventory
 
 
+func get_stat(stat: Ids.PlayerStat) -> int:
+	var property := Ids.player_stat_property(stat)
+	if property.is_empty() or not property in self:
+		push_warning("PlayerInfo has no stat '%s'" % Ids.name_of(Ids.PlayerStat, stat))
+		return 0
+	return get(property)
+
+
+## The stat's max_<stat> value, or -1 if it has none.
+func get_stat_max(stat: Ids.PlayerStat) -> int:
+	var max_property := StringName("max_" + Ids.player_stat_property(stat))
+	return get(max_property) if max_property in self else -1
+
+
 func refill_actions() -> void:
 	actions = max_actions
 

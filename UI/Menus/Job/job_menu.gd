@@ -87,8 +87,8 @@ func _refresh_assignment() -> void:
 	for zone: GirlDropZone in slots_row.get_children():
 		_clear(zone.chips)
 		var girl_id := _job.get_slot(zone.slot_index)
-		zone.set_placeholder_visible(girl_id.is_empty())
-		if not girl_id.is_empty():
+		zone.set_placeholder_visible(girl_id == Ids.Girl.NONE)
+		if girl_id != Ids.Girl.NONE:
 			_add_chip(zone, GameState.girls.get_by_id(girl_id))
 
 	_clear(pool_zone.chips)
@@ -100,7 +100,7 @@ func _refresh_assignment() -> void:
 	pool_zone.set_placeholder_visible(not any_free)
 
 
-func _on_girl_dropped(girl_id: StringName, slot_index: int) -> void:
+func _on_girl_dropped(girl_id: Ids.Girl, slot_index: int) -> void:
 	if slot_index == GirlDropZone.POOL:
 		_job.unassign(girl_id)
 	else:
