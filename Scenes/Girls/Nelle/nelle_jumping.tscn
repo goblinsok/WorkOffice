@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://Scenes/Girls/Poses/base_jumping.tscn" id="1_pose"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Girls/Nelle/Jumping.png" id="2_sheet"]
+
+[node name="NelleJumping" instance=ExtResource("1_pose")]
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource("2_sheet")

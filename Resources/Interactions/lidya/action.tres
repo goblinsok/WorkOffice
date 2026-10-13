@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="InteractionData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Interactions/interaction_data.gd" id="1_interaction"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="2_condition"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="3_effect"]
+[ext_resource type="Script" path="res://Scripts/Actions/action_scenes_available_condition.gd" id="4_available"]
+[ext_resource type="Script" path="res://Scripts/Actions/action_scene_effect.gd" id="5_play"]
+
+[sub_resource type="Resource" id="Resource_available"]
+script = ExtResource("4_available")
+
+[sub_resource type="Resource" id="Resource_play"]
+script = ExtResource("5_play")
+
+[resource]
+script = ExtResource("1_interaction")
+id = &"lidya_action"
+label = "Action"
+hide_if_unavailable = true
+conditions = Array[ExtResource("2_condition")]([SubResource("Resource_available")])
+effects = Array[ExtResource("3_effect")]([SubResource("Resource_play")])

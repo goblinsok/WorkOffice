@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="InteractionData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="InteractionData" load_steps=6 format=3 uid="uid://g8pdfis4ln4s"]
 
 [ext_resource type="Script" uid="uid://bqdkh6nuj0f7e" path="res://Scripts/Interactions/interaction_data.gd" id="1_interaction"]
+[ext_resource type="Script" uid="uid://bwndxicnnty6q" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="1_jgwpp"]
 [ext_resource type="Script" uid="uid://suohlujfec1j" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="2_effect"]
 [ext_resource type="Script" uid="uid://ctctod1b1gnde" path="res://Scripts/Interactions/Effects/bubble_effect.gd" id="3_bubble"]
 

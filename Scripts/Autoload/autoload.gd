@@ -11,11 +11,13 @@ const LOCATIONS_REPO_PATH := "res://Resources/Locations/locations_repo.tres"
 const PLAYER_INFO_PATH := "res://Resources/Player/player_info.tres"
 const JOBS_REPO_PATH := "res://Resources/Jobs/jobs_repo.tres"
 const CUTSCENES_REPO_PATH := "res://Resources/Cutscenes/cutscenes_repo.tres"
+const ACTION_SCENES_REPO_PATH := "res://Resources/ActionScenes/action_scenes_repo.tres"
 
 var girls: GirlsRepo
 var locations: LocationsRepo
 var jobs: JobsRepo
 var cutscenes: CutscenesRepo
+var action_scenes: ActionScenesRepo
 var player_stats: PlayerInfo
 var world_info: WorldInfo
 
@@ -33,6 +35,7 @@ func load_default() -> void:
 	locations = load(LOCATIONS_REPO_PATH)
 	jobs = load(JOBS_REPO_PATH)
 	cutscenes = load(CUTSCENES_REPO_PATH)
+	action_scenes = load(ACTION_SCENES_REPO_PATH)
 	player_stats = load(PLAYER_INFO_PATH)
 	player_stats.create_inventory()
 	world_info = WorldInfo.new()
@@ -41,7 +44,7 @@ func load_default() -> void:
 	player_stats.refill_actions()
 
 	if OS.is_debug_build():
-		for problem in ContentValidator.validate(girls, locations, cutscenes):
+		for problem in ContentValidator.validate(girls, locations, cutscenes, action_scenes):
 			push_error("Content: " + problem)
 
 

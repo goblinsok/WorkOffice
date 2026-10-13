@@ -34,14 +34,18 @@ func _ready() -> void:
 
 	wait_button.pressed.connect(func(): TimeManager.spend_actions())
 
-	# Cutscenes: only the top info bar stays; the toolbar and menus (the map too) go away.
-	GlobalSignals.cutscene_started.connect(_on_cutscene_started)
-	GlobalSignals.cutscene_finished.connect(func(_cutscene: CutsceneData): top_menu.visible = true)
+	# Cutscenes and the action minigame: only the top info bar stays; the toolbar and menus
+	# (the map too) go away.
+	GlobalSignals.cutscene_started.connect(func(_cutscene: CutsceneData): _set_toolbar_visible(false))
+	GlobalSignals.cutscene_finished.connect(func(_cutscene: CutsceneData): _set_toolbar_visible(true))
+	GlobalSignals.action_started.connect(func(_scene: ActionSceneData): _set_toolbar_visible(false))
+	GlobalSignals.action_finished.connect(_set_toolbar_visible.bind(true))
 
 
-func _on_cutscene_started(_cutscene: CutsceneData) -> void:
-	top_menu.visible = false
-	close_menus()
+func _set_toolbar_visible(shown: bool) -> void:
+	top_menu.visible = shown
+	if not shown:
+		close_menus()
 
 
 func toggle_menu(menu: BaseMenu) -> void:

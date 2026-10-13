@@ -12,7 +12,7 @@ func get_visible_interactions(context: InteractionContext) -> Array[InteractionD
 
 func can_interact() -> bool:
 	return not is_busy and not TimeManager.is_transitioning and not DialogManager.is_active() \
-			and not CutsceneManager.is_playing()
+			and not CutsceneManager.is_playing() and not ActionManager.is_playing()
 
 
 func run(interaction: InteractionData, context: InteractionContext) -> void:
@@ -25,7 +25,7 @@ func run(interaction: InteractionData, context: InteractionContext) -> void:
 		is_busy = false
 		return
 	if had_view:
-		_refresh_stale_view(context)
+		refresh_view(context)
 	GlobalSignals.interaction_started.emit(interaction, context)
 
 	await interaction.execute(context)
@@ -37,9 +37,9 @@ func run(interaction: InteractionData, context: InteractionContext) -> void:
 	await TimeManager.spend_actions(interaction.action_cost)
 
 
-## A cutscene that staged a location rebuilds the world view, which frees the clicked girl's
-## view. Point the context at the girl's new view (or null if she is not in the world).
-func _refresh_stale_view(context: InteractionContext) -> void:
+## A cutscene or action scene that staged a location rebuilds the world view, which frees the
+## clicked girl's view. Points the context at the girl's new view (or null if she is not in the world).
+func refresh_view(context: InteractionContext) -> void:
 	if is_instance_valid(context.view):
 		return
 	context.view = null

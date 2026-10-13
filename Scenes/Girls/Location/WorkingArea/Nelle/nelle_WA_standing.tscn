@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3]
-
-[ext_resource type="PackedScene" uid="uid://djiqxak0qvbw7" path="res://Scenes/Girls/Location/base_girl_location_scene.tscn" id="1_base"]
-[ext_resource type="Texture2D" uid="uid://dm8vuqrmfuev6" path="res://Assets/Characters/Girls/Nelle/Sheet.png" id="2_sheet"]
-
-[node name="NelleLocation" instance=ExtResource("1_base")]
-
-[node name="Sprite" parent="." index="0"]
-texture = ExtResource("2_sheet")

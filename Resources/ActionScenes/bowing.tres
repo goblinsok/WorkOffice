@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ActionSceneData" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Actions/action_scene_data.gd" id="1_scene"]
+[ext_resource type="Texture2D" path="res://Assets/UI/Actions/bowing.png" id="2_icon"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="3_condition"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/location_condition.gd" id="4_location"]
+[ext_resource type="Script" path="res://Scripts/Interactions/interaction_data.gd" id="5_interaction"]
+[ext_resource type="Resource" path="res://Resources/ActionScenes/Options/praise.tres" id="6_praise"]
+[ext_resource type="Resource" path="res://Resources/ActionScenes/Options/scold.tres" id="7_scold"]
+[ext_resource type="Resource" path="res://Resources/ActionScenes/Options/pat.tres" id="8_pat"]
+
+[sub_resource type="Resource" id="Resource_working_area"]
+script = ExtResource("4_location")
+locations = Array[int]([1])
+
+[resource]
+script = ExtResource("1_scene")
+id = &"bowing"
+label = "Bowing"
+icon = ExtResource("2_icon")
+pose = 3
+conditions = Array[ExtResource("3_condition")]([SubResource("Resource_working_area")])
+options = Array[ExtResource("5_interaction")]([ExtResource("6_praise"), ExtResource("7_scold"), ExtResource("8_pat")])

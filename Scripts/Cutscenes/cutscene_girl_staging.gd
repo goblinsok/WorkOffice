@@ -1,14 +1,14 @@
 @tool
 class_name CutsceneGirlStaging extends Resource
-## One girl placed in a staged location of a CutsceneBackgroundStep.
-## In the inspector the poi dropdown lists only the points of the step's location.
+## One girl placed in a staged location of a CutsceneBackgroundStep (ActionManager builds
+## them in code too). In the inspector the poi dropdown lists only the points of the step's location.
 
 @export var girl: Ids.Girl = Ids.Girl.NONE
 ## Point of interest the girl stands at. It must be one of the step location's PoiInfos.
 @export var poi: Ids.Poi = Ids.Poi.NONE
-@export var animation: StringName = &"Standing"
+@export var pose: Ids.Pose = Ids.Pose.STANDING
 
-## Set by the owning CutsceneBackgroundStep. Only used to filter the poi dropdown.
+## The staged location. Set by the owning CutsceneBackgroundStep (also filters the poi dropdown).
 var location: LocationInfo:
 	set(value):
 		location = value

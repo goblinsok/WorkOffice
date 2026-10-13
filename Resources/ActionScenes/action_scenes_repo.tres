@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ActionScenesRepo" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Actions/action_scenes_repo.gd" id="1_repo"]
+[ext_resource type="Script" path="res://Scripts/Actions/action_scene_data.gd" id="2_scene"]
+[ext_resource type="Resource" path="res://Resources/ActionScenes/bowing.tres" id="3_bowing"]
+
+[resource]
+script = ExtResource("1_repo")
+scenes = Array[ExtResource("2_scene")]([ExtResource("3_bowing")])

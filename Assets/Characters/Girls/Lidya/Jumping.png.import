@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm8vuqrmfuev6"
-path="res://.godot/imported/Sheet.png-6b55d7af64b049f774b810fa53133d6e.ctex"
+uid="uid://cbba6p1pyol8x"
+path="res://.godot/imported/Jumping.png-e1b048de0bc743d38768724803f5de09.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Characters/Girls/Nelle/Sheet.png"
-dest_files=["res://.godot/imported/Sheet.png-6b55d7af64b049f774b810fa53133d6e.ctex"]
+source_file="res://Assets/Characters/Girls/Lidya/Jumping.png"
+dest_files=["res://.godot/imported/Jumping.png-e1b048de0bc743d38768724803f5de09.ctex"]
 
 [params]
 

@@ -3,8 +3,8 @@ class_name BaseLocation extends Node2D
 ## the girls that WorldInfo placed here. Set `info` before adding it to the tree.
 
 var info: LocationInfo
-## Cutscene staging: set both before add_child. A staged location ignores WorldInfo placements
-## and spawns only staged_girls (non-clickable).
+## Staging (cutscenes, action scenes): set both before add_child. A staged location ignores
+## WorldInfo placements and spawns only staged_girls (non-clickable, group staged_girl_views).
 var staged_girls: Array[CutsceneGirlStaging] = []
 var is_staged: bool = false
 
@@ -43,13 +43,10 @@ func _spawn_staged_girls() -> void:
 			continue
 		var setup := PoiGirlSetup.new()
 		setup.girl = girl.id
-		setup.animation = staging.animation
+		setup.pose = staging.pose
 		point.spawn(GirlPlacement.new(girl, info, poi, setup))
-		var girl_view := point.girl_view
-		if girl_view == null:
-			continue
-		girl_view.select.input_pickable = false
-		girl_view.remove_from_group(&"girl_views") # staged views are not the real world views
+		if point.girl_view != null:
+			point.girl_view.set_staged()
 
 
 func get_point(poi: Ids.Poi) -> PointOfInterest:

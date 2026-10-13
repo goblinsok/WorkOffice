@@ -7,16 +7,16 @@ class_name PoiGirlSetup extends Resource
 ## All must pass for this setup to be used. Checked when the girls are placed (at the start of
 ## every phase) with a context of the girl, the location and the point (no view).
 @export var conditions: Array[InteractionCondition] = []
-## Animation played by the girl's scene at this point.
-@export var animation: StringName = &"Standing"
-## Optional override of GirlInfo.location_scene.
+## Her pose at this point: picks her scene from GirlInfo.poses.
+@export var pose: Ids.Pose = Ids.Pose.STANDING
+## Optional one-off scene that replaces her pose scene here.
 @export var scene: PackedScene
 ## Offered at this point in addition to GirlInfo.interactions (shown after them).
 @export var extra_interactions: Array[InteractionData] = []
 
 
 func get_scene(girl_info: GirlInfo) -> PackedScene:
-	return scene if scene != null else girl_info.location_scene
+	return scene if scene != null else girl_info.get_pose_scene(pose)
 
 
 func is_available(context: InteractionContext) -> bool:

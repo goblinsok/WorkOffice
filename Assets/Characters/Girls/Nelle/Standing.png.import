@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cedigx53fp3fo"
-path="res://.godot/imported/Sheet.png-5122f6f6c1f7d3797672402f96801dab.ctex"
+uid="uid://b5v2hh3076pof"
+path="res://.godot/imported/Standing.png-735fca5391cfb0fbbefe5608c26bafb7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Characters/Girls/Lidya/Sheet.png"
-dest_files=["res://.godot/imported/Sheet.png-5122f6f6c1f7d3797672402f96801dab.ctex"]
+source_file="res://Assets/Characters/Girls/Nelle/Standing.png"
+dest_files=["res://.godot/imported/Standing.png-735fca5391cfb0fbbefe5608c26bafb7.ctex"]
 
 [params]
 

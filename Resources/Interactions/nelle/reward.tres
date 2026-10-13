@@ -1,17 +1,15 @@
-[gd_resource type="Resource" script_class="InteractionData" load_steps=11 format=3]
+[gd_resource type="Resource" script_class="InteractionData" load_steps=12 format=3 uid="uid://c268l8medvruu"]
 
 [ext_resource type="Script" uid="uid://bqdkh6nuj0f7e" path="res://Scripts/Interactions/interaction_data.gd" id="1_interaction"]
 [ext_resource type="Script" uid="uid://suohlujfec1j" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="2_effect"]
 [ext_resource type="Script" uid="uid://bwndxicnnty6q" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="3_condition"]
-[ext_resource type="Script" path="res://Scripts/Interactions/Conditions/player_stat_condition.gd" id="4_player_stat"]
+[ext_resource type="Script" uid="uid://ckvebr7vcx4mw" path="res://Scripts/Interactions/Conditions/player_stat_condition.gd" id="4_player_stat"]
 [ext_resource type="Script" uid="uid://cbrxjrkp1gpro" path="res://Scripts/Interactions/Effects/expression_effect.gd" id="5_expression"]
 [ext_resource type="Script" uid="uid://cyl88fdrwwfav" path="res://Scripts/Interactions/Effects/stat_effect.gd" id="6_stat"]
 [ext_resource type="Script" uid="uid://ctctod1b1gnde" path="res://Scripts/Interactions/Effects/bubble_effect.gd" id="7_bubble"]
 
 [sub_resource type="Resource" id="Resource_money"]
 script = ExtResource("4_player_stat")
-stat = 1
-comparison = 0
 amount = 10
 
 [sub_resource type="Resource" id="Resource_pay"]
@@ -20,7 +18,6 @@ expression = "add_money(-10)"
 
 [sub_resource type="Resource" id="Resource_affection"]
 script = ExtResource("6_stat")
-stat = 3
 amount = 2
 
 [sub_resource type="Resource" id="Resource_thanks"]

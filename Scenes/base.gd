@@ -10,11 +10,12 @@ var _is_switching: bool = false
 func _ready() -> void:
 	GlobalSignals.switch_location.connect(switch_locations)
 	GlobalSignals.cutscene_background_requested.connect(_on_cutscene_background_requested)
+	GlobalSignals.action_stage_requested.connect(_on_action_stage_requested)
 	_show_location(GameState.world_info.current_location)
 
 
 func switch_locations(new_location: LocationInfo) -> void:
-	if _is_switching or TimeManager.is_transitioning or CutsceneManager.is_playing():
+	if _is_switching or TimeManager.is_transitioning or CutsceneManager.is_playing() or ActionManager.is_playing():
 		return
 	if new_location == null or not new_location.is_available():
 		return
@@ -39,7 +40,15 @@ func _on_cutscene_background_requested(step: CutsceneBackgroundStep) -> void:
 		push_warning("Cutscene location '%s' is not available" % Ids.name_of(Ids.Location, step.location.id))
 
 
-## Staged locations are cutscene-only: world_info and location_changed are left alone.
+## staging == null restores the real location; otherwise its location is staged with only that girl.
+func _on_action_stage_requested(staging: CutsceneGirlStaging) -> void:
+	if staging == null:
+		_show_location(GameState.world_info.current_location)
+	else:
+		_show_location(staging.location, [staging] as Array[CutsceneGirlStaging], true)
+
+
+## Staged locations (cutscenes, action scenes) leave world_info and location_changed alone.
 func _show_location(info: LocationInfo, staged_girls: Array[CutsceneGirlStaging] = [], is_staged: bool = false) -> void:
 	if current_location:
 		location_center.remove_child(current_location)

@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="GirlInfo" load_steps=8 format=3 uid="uid://dfnqs5nss5hqp"]
+[gd_resource type="Resource" script_class="GirlInfo" load_steps=11 format=3 uid="uid://dfnqs5nss5hqp"]
 
 [ext_resource type="Script" uid="uid://bcfu86pek5luo" path="res://Scripts/Girls/girl_info.gd" id="1_girl_info"]
-[ext_resource type="PackedScene" uid="uid://dilancoh1gnht" path="res://Scenes/Girls/Location/WorkingArea/Lidya/lidya_WA_standing.tscn" id="2_lidya_WA_s"]
-[ext_resource type="Texture2D" uid="uid://cedigx53fp3fo" path="res://Assets/Characters/Girls/Lidya/Sheet.png" id="3_Sheet"]
+[ext_resource type="PackedScene" path="res://Scenes/Girls/Lidya/lidya_standing.tscn" id="pose_standing"]
+[ext_resource type="PackedScene" path="res://Scenes/Girls/Lidya/lidya_jumping.tscn" id="pose_jumping"]
+[ext_resource type="PackedScene" path="res://Scenes/Girls/Lidya/lidya_bowing.tscn" id="pose_bowing"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Girls/Lidya/Standing.png" id="3_Sheet"]
 [ext_resource type="Script" uid="uid://bqdkh6nuj0f7e" path="res://Scripts/Interactions/interaction_data.gd" id="4_interaction"]
-[ext_resource type="Resource" path="res://Resources/Interactions/lidya/talk.tres" id="5_talk"]
-[ext_resource type="Resource" path="res://Resources/Interactions/lidya/look.tres" id="6_look"]
+[ext_resource type="Resource" uid="uid://d30luabbualo2" path="res://Resources/Interactions/lidya/talk.tres" id="5_talk"]
+[ext_resource type="Resource" uid="uid://g8pdfis4ln4s" path="res://Resources/Interactions/lidya/look.tres" id="6_look"]
+[ext_resource type="Resource" path="res://Resources/Interactions/lidya/action.tres" id="7_action"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1"]
 atlas = ExtResource("3_Sheet")
@@ -16,11 +19,15 @@ script = ExtResource("1_girl_info")
 id = 1
 display_name = "Lidya"
 name_color = Color(0.95, 0.7, 0.5, 1)
-location_scene = ExtResource("2_lidya_WA_s")
-interactions = Array[ExtResource("4_interaction")]([ExtResource("5_talk"), ExtResource("6_look")])
+poses = Dictionary[int, PackedScene]({
+1: ExtResource("pose_standing"),
+2: ExtResource("pose_jumping"),
+3: ExtResource("pose_bowing")
+})
 portrait = SubResource("AtlasTexture_1")
 role = "Accountant"
 bio = "Meticulous with numbers, hopeless with printers. Keeps a secret stash of snacks in the bottom drawer."
+interactions = Array[ExtResource("4_interaction")]([ExtResource("5_talk"), ExtResource("6_look"), ExtResource("7_action")])
 energy = 100
 attack = 8
 attack_energy_cost = 15

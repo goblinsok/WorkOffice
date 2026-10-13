@@ -42,14 +42,14 @@ func _ready() -> void:
 	await get_tree().process_frame
 	var view: BaseGirlLocation = loc.get_point(Ids.Poi.WORKING_AREA_DESK_LEFT).girl_view
 	check(view != null and view.get_girl().id == Ids.Girl.LIDYA, "lidya spawned at desk_left")
-	check(view.animation_player.current_animation == "Standing", "animation Standing")
+	check(view.scene_file_path.ends_with("lidya_standing.tscn") and view.animation_player.current_animation == "Standing", "standing pose scene, animation Standing")
 
 	print("== Interaction menu")
 	var menu = base.get_node("InteractionMenu")
 	GlobalSignals.girl_clicked.emit(view)
-	check(menu.visible and menu.options_root.get_child_count() == 3, "menu open with 3 options")
+	check(menu.visible and menu.options_root.get_child_count() == 4, "menu open with 4 options")
 	var ids := InteractionManager.get_visible_interactions(InteractionContext.new(view)).map(func(i: InteractionData) -> StringName: return i.id)
-	check(ids == [&"lidya_talk", &"lidya_look", &"lidya_reward"], "Lidya's own Talk/Look + desk extra Reward: %s" % [ids])
+	check(ids == [&"lidya_talk", &"lidya_look", &"lidya_action", &"lidya_reward"], "Lidya's own Talk/Look/Action + desk extra Reward: %s" % [ids])
 
 	print("== Talk (dialog)")
 	var talk: Button = menu.options_root.get_child(0)
@@ -75,7 +75,7 @@ func _ready() -> void:
 
 	print("== Reward")
 	GlobalSignals.girl_clicked.emit(view)
-	var reward: Button = menu.options_root.get_child(2)
+	var reward: Button = menu.options_root.get_child(3)
 	check(not reward.disabled, "reward enabled with $50")
 	reward.pressed.emit()
 	await get_tree().process_frame
@@ -126,6 +126,7 @@ func _ready() -> void:
 	await _test_day_end_battle(base)
 	await _test_cutscene(base)
 	await _test_affection_cutscene()
+	await _test_action_minigame(base)
 
 	print("\nRESULT: %s" % ("PASS" if failures == 0 else "%d FAILURES" % failures))
 	get_tree().quit(failures)
@@ -139,7 +140,7 @@ func _test_ids_and_validator() -> void:
 	check(Ids.poi_label(Ids.Poi.WORKING_AREA_DESK_LEFT) == "Desk Left", "poi_label: " + Ids.poi_label(Ids.Poi.WORKING_AREA_DESK_LEFT))
 	check(Ids.stat_from_name("affection") == Ids.Stat.AFFECTION and Ids.stat_property(Ids.Stat.ENERGY) == &"energy", "stat helpers")
 
-	var problems := ContentValidator.validate(GameState.girls, GameState.locations, GameState.cutscenes)
+	var problems := ContentValidator.validate(GameState.girls, GameState.locations, GameState.cutscenes, GameState.action_scenes)
 	check(problems.is_empty(), "shipped content is valid: %s" % [problems])
 
 	# A staging at a POI of another location, and a girl setup without a girl.
@@ -154,7 +155,7 @@ func _test_ids_and_validator() -> void:
 	var mats := GameState.locations.get_by_id(Ids.Location.GYM).get_poi(Ids.Poi.GYM_MATS)
 	var empty_setup := PoiGirlSetup.new()
 	mats.girl_setups.append(empty_setup)
-	problems = ContentValidator.validate(GameState.girls, GameState.locations, GameState.cutscenes)
+	problems = ContentValidator.validate(GameState.girls, GameState.locations, GameState.cutscenes, GameState.action_scenes)
 	GameState.cutscenes.cutscenes.erase(bad)
 	mats.girl_setups.erase(empty_setup)
 	check(problems.size() == 2, "2 problems reported: %s" % [problems])
@@ -173,11 +174,11 @@ func _test_ids_and_validator() -> void:
 	check(hint.contains("GYM_TREADMILL") and hint.contains("GYM_MATS") and not hint.contains("WORKING_AREA"), "poi dropdown filtered: " + hint)
 
 
-func _staging(girl: Ids.Girl, poi: Ids.Poi, animation: StringName = &"Standing") -> CutsceneGirlStaging:
+func _staging(girl: Ids.Girl, poi: Ids.Poi, pose: Ids.Pose = Ids.Pose.STANDING) -> CutsceneGirlStaging:
 	var staging := CutsceneGirlStaging.new()
 	staging.girl = girl
 	staging.poi = poi
-	staging.animation = animation
+	staging.pose = pose
 	return staging
 
 
@@ -187,7 +188,7 @@ func _make_test_cutscene() -> CutsceneData:
 	cutscene.id = &"temp_smoke"
 	var stage := CutsceneBackgroundStep.new()
 	stage.location = GameState.locations.get_by_id(Ids.Location.GYM)
-	stage.girls = [_staging(Ids.Girl.LIDYA, Ids.Poi.GYM_TREADMILL, &"Jumping")] as Array[CutsceneGirlStaging]
+	stage.girls = [_staging(Ids.Girl.LIDYA, Ids.Poi.GYM_TREADMILL, Ids.Pose.JUMPING)] as Array[CutsceneGirlStaging]
 	var part1 := CutsceneDialogStep.new()
 	part1.dialog_path = "res://Dialogs/cutscenes/example.dlg"
 	part1.label = "part1"
@@ -429,7 +430,7 @@ func _test_placement_rules() -> void:
 	# Several setups for one girl at one point; conditions decide which are available.
 	var night_setup := PoiGirlSetup.new()
 	night_setup.girl = Ids.Girl.LIDYA
-	night_setup.animation = &"Jumping"
+	night_setup.pose = Ids.Pose.JUMPING
 	night_setup.conditions = [evening] as Array[InteractionCondition]
 	mats.girl_setups.append(night_setup)
 	world.current_time = Enums.TIME_STATE.MORNING
@@ -692,4 +693,99 @@ func _test_affection_cutscene() -> void:
 
 	await use_chocolate.call(nelle)
 	check(nelle.affection == 11 and not CutsceneManager.is_playing(), "play_once: no replay at 11")
+	Engine.time_scale = 1.0
+
+
+func _test_action_minigame(base: Node) -> void:
+	print("== Action minigame")
+	Engine.time_scale = 10.0
+	var world := GameState.world_info
+	var player := GameState.player_stats
+	var ui = base.get_node("GameUi")
+	var menu = base.get_node("InteractionMenu")
+	var overlay = base.get_node("ActionOverlay")
+	var lidya := GameState.girls.get_by_id(Ids.Girl.LIDYA)
+	var nelle := GameState.girls.get_by_id(Ids.Girl.NELLE)
+	var wa := GameState.locations.get_by_id(Ids.Location.WORKING_AREA)
+	var gym := GameState.locations.get_by_id(Ids.Location.GYM)
+	var action: InteractionData = load("res://Resources/Interactions/lidya/action.tres")
+
+	var gym_ctx := InteractionContext.new().with_girl(lidya)
+	gym_ctx.location = gym
+	gym_ctx.poi = gym.get_poi(Ids.Poi.GYM_MATS)
+	check(GameState.action_scenes.get_available(gym_ctx).is_empty() and not action.is_visible(gym_ctx), "gym: no action scene, Action hidden")
+
+	GlobalSignals.switch_location.emit(wa)
+	check(await _wait_for(func() -> bool: return base.current_location.info == wa and not base._is_switching), "back in the working area")
+	world.placements.clear()
+	for poi_id: Ids.Poi in [Ids.Poi.WORKING_AREA_DESK_LEFT, Ids.Poi.WORKING_AREA_DESK_RIGHT]:
+		var girl := lidya if poi_id == Ids.Poi.WORKING_AREA_DESK_LEFT else nelle
+		var poi := wa.get_poi(poi_id)
+		world.placements[girl.id] = GirlPlacement.new(girl, wa, poi, poi.get_setups_for(girl.id)[0])
+	GlobalSignals.girls_placed.emit()
+	await get_tree().process_frame
+	var placement: GirlPlacement = world.placements[lidya.id]
+	var view: BaseGirlLocation = base.current_location.get_point(Ids.Poi.WORKING_AREA_DESK_LEFT).girl_view
+	lidya.set_stat(Ids.Stat.AROUSAL, 20)
+	player.refill_actions()
+	var actions := player.actions
+
+	GlobalSignals.girl_clicked.emit(view)
+	var action_button: Button = menu.options_root.get_child(2)
+	check(action_button.text == "Action" and not action_button.disabled, "working area: Action offered")
+	action_button.pressed.emit()
+	check(await _wait_for(func() -> bool: return overlay.visible and not ActionManager.is_busy()), "minigame started")
+	check(ActionManager.is_playing() and ActionManager.current.id == &"bowing", "starts with Bowing")
+	check(not ui.get_node("%TopMenu").visible and ui.get_node("VBoxContainer/TopInfo").visible, "toolbar hidden, info bar visible")
+	check(overlay.blocker.is_visible_in_tree() and not InteractionManager.can_interact(), "world blocked, no interactions")
+	var staged: BaseGirlLocation = base.current_location.get_point(Ids.Poi.WORKING_AREA_DESK_LEFT).girl_view
+	check(staged != null and staged.get_girl() == lidya and staged.scene_file_path.ends_with("lidya_bowing.tscn"), "Lidya's bowing scene at her desk")
+	check(staged != null and staged.animation_player.current_animation == "Bowing" and not staged.select.input_pickable, "Bowing animation, not clickable")
+	check(ActionManager.context.view == staged, "context points at the staged view")
+	check(base.current_location.get_point(Ids.Poi.WORKING_AREA_DESK_RIGHT).girl_view == null, "only she is shown")
+	check(world.placements[lidya.id] == placement and world.current_location == wa, "placement and location untouched")
+
+	var labels: Array = overlay.options_root.get_children().map(func(button: Button) -> String: return button.text)
+	labels.sort()
+	check(labels == ["Pat", "Praise", "Scold"], "options: %s" % [labels])
+	var scene_buttons: Array = overlay.scenes_row.get_children()
+	check(scene_buttons.size() == 1 and scene_buttons[0].text == "Bowing" and scene_buttons[0].has_theme_stylebox_override(&"normal"), "bottom bar: Bowing, marked current")
+	check(overlay.arousal_bar.value == 20 and overlay.value_label.text == "20 / 100", "arousal bar shows 20")
+
+	var press := func(label: String) -> void:
+		for button: Button in overlay.options_root.get_children():
+			if button.text == label:
+				button.pressed.emit()
+		await _wait_for(func() -> bool: return not ActionManager.is_busy())
+	await press.call("Pat")
+	check(lidya.arousal == 30 and overlay.value_label.text == "30 / 100", "Pat: +10")
+	await press.call("Scold")
+	check(lidya.arousal == 22, "Scold: -8")
+	await press.call("Praise")
+	check(lidya.arousal == 27, "Praise: +5")
+	check(staged.bubble_anchor.get_child_count() >= 1, "options show bubbles")
+	lidya.set_stat(Ids.Stat.AROUSAL, 95)
+	await press.call("Pat")
+	check(lidya.arousal == 100 and ActionManager.is_playing(), "capped at max, still playing")
+	check(player.actions == actions, "options spend no actions")
+
+	overlay.end_button.pressed.emit()
+	check(overlay.confirm.visible, "X asks for confirmation")
+	overlay.confirm_no.pressed.emit()
+	check(not overlay.confirm.visible and ActionManager.is_playing(), "Stay keeps playing")
+	var esc := InputEventAction.new()
+	esc.action = &"ui_cancel"
+	esc.pressed = true
+	overlay._unhandled_input(esc)
+	check(overlay.confirm.visible, "Esc asks for confirmation")
+	overlay.confirm_yes.pressed.emit()
+	check(await _wait_for(func() -> bool: return not ActionManager.is_playing() and not InteractionManager.is_busy), "End ends the minigame")
+	check(not overlay.visible and ui.get_node("%TopMenu").visible, "overlay gone, toolbar back")
+	var restored: BaseGirlLocation = base.current_location.get_point(Ids.Poi.WORKING_AREA_DESK_LEFT).girl_view
+	check(restored != null and restored.scene_file_path.ends_with("lidya_standing.tscn") and restored.is_in_group(&"girl_views"), "back to her real standing view")
+	check(base.current_location.get_point(Ids.Poi.WORKING_AREA_DESK_RIGHT).girl_view != null, "Nelle is back")
+	check(player.actions == actions - 1, "the Action interaction cost 1 action")
+	check(lidya.arousal == 100, "arousal persists after the minigame")
+	lidya.set_stat(Ids.Stat.AROUSAL, 0)
+	player.refill_actions()
 	Engine.time_scale = 1.0

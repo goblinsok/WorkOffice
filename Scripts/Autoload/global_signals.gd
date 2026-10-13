@@ -27,3 +27,13 @@ signal cutscene_started(cutscene: CutsceneData)
 signal cutscene_finished(cutscene: CutsceneData)
 ## A cutscene background step wants to change the view. null = restore the real game view.
 signal cutscene_background_requested(step: CutsceneBackgroundStep)
+
+# --- Action minigame ---
+## Emitted while the screen is faded out, after the first scene was staged.
+signal action_started(scene: ActionSceneData)
+## Emitted while the screen is faded out, after the new scene was staged.
+signal action_scene_changed(scene: ActionSceneData)
+## Emitted while the screen is faded out, after the real location was restored.
+signal action_finished()
+## Show staging.location with only that girl (staging.pose). null = restore the real game view.
+signal action_stage_requested(staging: CutsceneGirlStaging)

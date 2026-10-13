@@ -8,9 +8,10 @@ signal stats_changed(stat: Ids.Stat, value: int)
 @export var id: Ids.Girl
 @export var display_name: String
 @export var name_color: Color = Color.WHITE
-## Default scene shown when the girl is spawned at a point of interest.
-## PoiGirlSetup.scene overrides it.
-@export var location_scene: PackedScene
+## Her world scene for each pose (inheriting Scenes/Girls/Poses/base_<pose>.tscn).
+## PoiGirlSetup, cutscene stagings and action scenes pick a pose; ContentValidator reports a
+## pose they use that has no scene here.
+@export var poses: Dictionary[Ids.Pose, PackedScene] = {}
 ## Photo used by menus (dossier, job assignment, battle).
 @export var portrait: Texture2D
 ## Job title shown in the dossier.
@@ -36,6 +37,11 @@ signal stats_changed(stat: Ids.Stat, value: int)
 @export var attack: int = 5
 ## Energy spent per attack. The girl stops acting when her energy is below this.
 @export var attack_energy_cost: int = 10
+
+
+## Her scene for the pose, or null if she has none.
+func get_pose_scene(pose: Ids.Pose) -> PackedScene:
+	return poses.get(pose)
 
 
 func has_stat(stat: Ids.Stat) -> bool:

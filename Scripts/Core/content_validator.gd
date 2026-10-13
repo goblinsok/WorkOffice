@@ -2,12 +2,14 @@ class_name ContentValidator extends RefCounted
 ## Cross-checks content that enums alone can't protect: a .tres still holding the number of a
 ## removed Ids value, a POI used in the wrong location, a scene marker without data, a missing
 ## dialog file, a misspelled .dlg speaker or stat name, duplicate content ids, a girl using
-## another girl's interaction file, a condition pointing at an unknown girl or stat.
+## another girl's interaction file, a condition pointing at an unknown girl or stat, a pose
+## without a scene for a girl who needs it, an action option that costs actions.
 ## Every problem is one readable line. GameState runs validate() at startup in debug builds,
 ## and the smoke test asserts that it returns nothing.
 
 const DIALOGS_DIR := "res://Dialogs"
 const CUTSCENES_DIR := "res://Resources/Cutscenes"
+const ACTION_SCENES_DIR := "res://Resources/ActionScenes"
 const INTERACTIONS_DIR := "res://Resources/Interactions"
 const ITEMS_DIR := "res://Resources/Items"
 const JOBS_DIR := "res://Resources/Jobs"
@@ -17,12 +19,14 @@ const MAX_SPEAKER_TYPO_DISTANCE := 2
 static var _stat_call_regex := RegEx.create_from_string("\\b(?:add_stat|stat)\\(\\s*\"([^\"]*)\"")
 
 
-static func validate(girls: GirlsRepo, locations: LocationsRepo, cutscenes: CutscenesRepo) -> PackedStringArray:
+static func validate(girls: GirlsRepo, locations: LocationsRepo, cutscenes: CutscenesRepo, action_scenes: ActionScenesRepo) -> PackedStringArray:
 	var problems: PackedStringArray = []
 	problems.append_array(_check_girls(girls))
 	problems.append_array(_check_locations(locations, girls))
 	problems.append_array(_check_cutscenes(_collect_cutscenes(cutscenes), cutscenes, girls))
-	var interactions := _load_all(INTERACTIONS_DIR, "InteractionData")
+	problems.append_array(_check_action_scenes(action_scenes, girls))
+	# Action options are InteractionData too and share the id space.
+	var interactions := _load_all(INTERACTIONS_DIR, "InteractionData") + _load_all(ACTION_SCENES_DIR, "InteractionData")
 	problems.append_array(_check_unique_ids("Interaction", interactions))
 	for interaction: InteractionData in interactions:
 		problems.append_array(_check_conditions(interaction.conditions, girls, "Interaction '%s'" % interaction.id))
@@ -70,6 +74,11 @@ static func _check_girls(girls: GirlsRepo) -> PackedStringArray:
 			problems.append("Girl %s is defined twice (%s, %s)" % [Ids.name_of(Ids.Girl, girl.id), seen[girl.id].resource_path, girl.resource_path])
 		else:
 			seen[girl.id] = girl
+			for pose: int in girl.poses:
+				if not Ids.Pose.values().has(pose) or pose == Ids.Pose.NONE:
+					problems.append("Girl %s has a scene for pose %s, which is not a valid Ids.Pose" % [Ids.name_of(Ids.Girl, girl.id), Ids.name_of(Ids.Pose, pose)])
+				elif girl.poses[pose] == null:
+					problems.append("Girl %s has an empty scene for pose %s" % [Ids.name_of(Ids.Girl, girl.id), Ids.name_of(Ids.Pose, pose)])
 			for interaction in girl.interactions:
 				problems.append_array(_check_interaction(interaction, girl.id, "Girl %s" % Ids.name_of(Ids.Girl, girl.id)))
 	for value: int in Ids.Girl.values():
@@ -80,6 +89,16 @@ static func _check_girls(girls: GirlsRepo) -> PackedStringArray:
 
 static func _is_registered_girl(girls: GirlsRepo, girl: Ids.Girl) -> bool:
 	return girl != Ids.Girl.NONE and girls.get_by_id(girl) != null
+
+
+## The girl (registered) has a scene for the pose.
+static func _check_pose(girls: GirlsRepo, girl: Ids.Girl, pose: Ids.Pose, context: String) -> PackedStringArray:
+	if pose == Ids.Pose.NONE or not Ids.Pose.values().has(pose):
+		return ["%s: pose %s is not a valid Ids.Pose" % [context, Ids.name_of(Ids.Pose, pose)]]
+	var info := girls.get_by_id(girl)
+	if info != null and info.get_pose_scene(pose) == null:
+		return ["%s: girl %s has no scene for pose %s (GirlInfo.poses)" % [context, Ids.name_of(Ids.Girl, girl), Ids.name_of(Ids.Pose, pose)]]
+	return []
 
 
 ## An interaction offered by a girl: not empty, its dialogs exist, and its file isn't in
@@ -159,6 +178,8 @@ static func _check_poi(location: LocationInfo, poi: PoiInfo, poi_owner: Dictiona
 			problems.append("POI %s has a setup for girl %s, who is not a registered girl" % [poi_name, girl_name])
 			continue
 		var context := "POI %s, girl %s setup" % [poi_name, girl_name]
+		if setup.scene == null:
+			problems.append_array(_check_pose(girls, setup.girl, setup.pose, context))
 		problems.append_array(_check_conditions(setup.conditions, girls, context))
 		for interaction in setup.extra_interactions:
 			problems.append_array(_check_interaction(interaction, setup.girl, context))
@@ -230,11 +251,45 @@ static func _check_staging(step: CutsceneBackgroundStep, girls: GirlsRepo, cutsc
 		var poi_name := Ids.name_of(Ids.Poi, staging.poi)
 		if not _is_registered_girl(girls, staging.girl):
 			problems.append("%s stages girl %s, who is not a registered girl" % [cutscene_name, girl_name])
+		else:
+			problems.append_array(_check_pose(girls, staging.girl, staging.pose, "%s, staging of %s" % [cutscene_name, girl_name]))
 		if step.location == null:
 			problems.append("%s stages girl %s but its background step has no location" % [cutscene_name, girl_name])
 		elif step.location.get_poi(staging.poi) == null:
 			problems.append("%s stages girl %s at POI %s, which is not in location %s" % [
 				cutscene_name, girl_name, poi_name, Ids.name_of(Ids.Location, step.location.id)])
+	return problems
+
+
+# ---------------------------------------------------------------- action scenes
+
+## Registered scenes plus every ActionSceneData .tres: ids, conditions, every girl's pose
+## scene, and options (not empty, no action cost, valid conditions).
+static func _check_action_scenes(repo: ActionScenesRepo, girls: GirlsRepo) -> PackedStringArray:
+	var problems: PackedStringArray = []
+	var scenes: Array[Resource] = []
+	for scene in repo.scenes:
+		if scene == null:
+			problems.append("action_scenes_repo.tres has an empty entry")
+		elif not scene in scenes:
+			scenes.append(scene)
+	for resource in _load_all(ACTION_SCENES_DIR, "ActionSceneData"):
+		if not resource in scenes:
+			scenes.append(resource)
+	problems.append_array(_check_unique_ids("Action scene", scenes))
+	for scene: ActionSceneData in scenes:
+		var scene_name := "Action scene '%s'" % scene.id
+		problems.append_array(_check_conditions(scene.conditions, girls, scene_name))
+		for girl in girls.girls:
+			if girl != null:
+				problems.append_array(_check_pose(girls, girl.id, scene.pose, scene_name))
+		for option in scene.options:
+			if option == null:
+				problems.append("%s has an empty option" % scene_name)
+				continue
+			if option.action_cost != 0:
+				problems.append("%s: option '%s' has action_cost %d (options spend no actions; set it to 0)" % [scene_name, option.id, option.action_cost])
+			problems.append_array(_check_conditions(option.conditions, girls, "%s, option '%s'" % [scene_name, option.id]))
 	return problems
 
 
@@ -253,6 +308,10 @@ static func _check_conditions(conditions: Array[InteractionCondition], girls: Gi
 				problems.append("%s: GirlStatCondition has no valid stat (%s)" % [context, Ids.name_of(Ids.Stat, girl_condition.stat)])
 			elif girl_condition.comparison == InteractionCondition.Comparison.BELOW_MAX and GirlInfo.new().get_stat_max(girl_condition.stat) < 0:
 				problems.append("%s: GirlStatCondition BELOW_MAX on %s, which has no max" % [context, Ids.name_of(Ids.Stat, girl_condition.stat)])
+		elif condition is LocationCondition:
+			for location: int in (condition as LocationCondition).locations:
+				if location == Ids.Location.NONE or not Ids.Location.values().has(location):
+					problems.append("%s: LocationCondition has location %s, which is not a valid Ids.Location" % [context, Ids.name_of(Ids.Location, location)])
 		elif condition is PlayerStatCondition:
 			var player_condition := condition as PlayerStatCondition
 			if not Ids.PlayerStat.values().has(player_condition.stat) or player_condition.stat == Ids.PlayerStat.NONE:

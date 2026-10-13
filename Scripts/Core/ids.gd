@@ -34,6 +34,15 @@ enum Poi {
 	GYM_MATS = 302,
 }
 
+## Body poses. Each girl has one scene per pose (GirlInfo.poses); a pose scene owns its
+## sprite sheet and its looping animation.
+enum Pose {
+	NONE = 0,
+	STANDING = 1,
+	JUMPING = 2,
+	BOWING = 3,
+}
+
 ## Girl stats. Each one maps to the GirlInfo property of the same lowercase name.
 enum Stat {
 	NONE = 0,

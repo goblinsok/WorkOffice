@@ -2,21 +2,22 @@
 
 [ext_resource type="Script" uid="uid://im47ahwqfmn4" path="res://Scripts/Locations/location_info.gd" id="1_location_i"]
 [ext_resource type="PackedScene" uid="uid://bgvnn500pe0pw" path="res://Scenes/Locations/Gym/gym_scene.tscn" id="2_gym_scene"]
+[ext_resource type="Script" uid="uid://bwndxicnnty6q" path="res://Scripts/Interactions/Conditions/interaction_condition.gd" id="3_irhm8"]
 [ext_resource type="Script" uid="uid://bqdkh6nuj0f7e" path="res://Scripts/Interactions/interaction_data.gd" id="5_interactio"]
 [ext_resource type="Script" uid="uid://4qiqxpnmdiy4" path="res://Scripts/Locations/poi_girl_setup.gd" id="6_poi_girl_s"]
 [ext_resource type="Script" uid="uid://dj1alukisn32v" path="res://Scripts/Locations/poi_info.gd" id="7_poi_info"]
-[ext_resource type="Resource" path="res://Resources/Interactions/lidya/reward.tres" id="lidya_reward"]
-[ext_resource type="Resource" path="res://Resources/Interactions/nelle/reward.tres" id="nelle_reward"]
+[ext_resource type="Resource" uid="uid://de6uotyj24mfy" path="res://Resources/Interactions/lidya/reward.tres" id="lidya_reward"]
+[ext_resource type="Resource" uid="uid://c268l8medvruu" path="res://Resources/Interactions/nelle/reward.tres" id="nelle_reward"]
 
 [sub_resource type="Resource" id="Resource_1"]
 script = ExtResource("6_poi_girl_s")
 girl = 1
-animation = &"Jumping"
+pose = 2
 
 [sub_resource type="Resource" id="Resource_2"]
 script = ExtResource("6_poi_girl_s")
 girl = 2
-animation = &"Jumping"
+pose = 2
 
 [sub_resource type="Resource" id="Resource_3"]
 script = ExtResource("7_poi_info")

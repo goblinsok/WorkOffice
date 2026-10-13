@@ -4,7 +4,7 @@ Data-driven sequences of steps. `CutsceneManager` (autoload) plays them; `UI/Cut
 
 ## Pieces
 - `CutsceneData` (`.tres` in `Resources/Cutscenes/`): `id`, `trigger_interaction`, `trigger_after_action`, `conditions`, `play_once`, `cancels_action`, `steps`. Register it in `cutscenes_repo.tres` to auto-trigger. Unregistered ones can still be played from code with `await CutsceneManager.play(data, ctx)`.
-- Steps (`CutsceneStep`, abstract, `run(ctx)` may await): `CutsceneDialogStep` (`.dlg` path + label) and `CutsceneBackgroundStep` (a full-screen `image`, and/or a `location` staged with `CutsceneGirlStaging`s: `girl`, `poi`, `animation`). Both are `@tool` only so the staging's `poi` dropdown lists just the step location's points; `ContentValidator` reports a staging POI outside its location.
+- Steps (`CutsceneStep`, abstract, `run(ctx)` may await): `CutsceneDialogStep` (`.dlg` path + label) and `CutsceneBackgroundStep` (a full-screen `image`, and/or a `location` staged with `CutsceneGirlStaging`s: `girl`, `poi`, `pose`). Both are `@tool` only so the staging's `poi` dropdown lists just the step location's points; `ContentValidator` reports a staging POI outside its location.
 - A staged location is shown in the real world view without changing `WorldInfo.current_location` or placements; staged girls are not clickable. The real location is restored (with a fade) when the cutscene ends.
 
 ## Flow

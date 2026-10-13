@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="InteractionData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Interactions/interaction_data.gd" id="1_interaction"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/interaction_effect.gd" id="2_effect"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/stat_effect.gd" id="3_stat"]
+[ext_resource type="Script" path="res://Scripts/Interactions/Effects/bubble_effect.gd" id="4_bubble"]
+
+[sub_resource type="Resource" id="Resource_arousal"]
+script = ExtResource("3_stat")
+stat = 2
+amount = 10
+
+[sub_resource type="Resource" id="Resource_bubble"]
+script = ExtResource("4_bubble")
+lines = Array[String](["Mmh~", "W-what are you doing...?"])
+duration = 1.5
+
+[resource]
+script = ExtResource("1_interaction")
+id = &"action_pat"
+label = "Pat"
+action_cost = 0
+effects = Array[ExtResource("2_effect")]([SubResource("Resource_arousal"), SubResource("Resource_bubble")])

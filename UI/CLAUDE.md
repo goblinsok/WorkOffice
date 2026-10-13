@@ -5,6 +5,7 @@
 LocationControl (world, layer 0)   world-container Controls use mouse_filter IGNORE
 GameUi 10       top bar, toolbar, Menus/{Girls, Inventory, EmployeeCard, Job, Map}
 InteractionMenu 15
+ActionOverlay 20 (action minigame: STOP blocker, Arousal bar, options, scene bar, end confirmation; hidden outside it)
 CutsceneOverlay: ImageLayer 1 (stage image), InputLayer 25 (STOP blocker, click advances), SkipLayer 35 (Skip button, above DialogPanel); all hidden outside a cutscene
 DialogPanel 30
 BattleWindow 40
